@@ -1,9 +1,15 @@
-from django import forms
 from django.contrib import admin
-import django_ace  # type: ignore
 from django.contrib import messages
 from django.contrib import admin
-from pipeline_configuration.models import PipelineExecutionRecord, Workflow, Version, PipelineRun, PipelineYaml, SpecYaml
+from pipeline_configuration.forms import PipelineYamlForm, SpecYamlForm
+from pipeline_configuration.models import (
+    PipelineExecutionRecord,
+    Workflow,
+    Version,
+    PipelineRun,
+    PipelineYaml,
+    SpecYaml,
+)
 
 
 @admin.register(Workflow)
@@ -16,13 +22,13 @@ class VersionAdmin(admin.ModelAdmin):
     list_display = ("number",)
 
 
-class YamlBodyField(forms.ModelForm):
-    class Meta:
-        model = PipelineYaml
-        widgets = {
-            "body": django_ace.AceWidget(mode="yaml", theme="twilight"),
-        }
-        fields = "__all__"
+# class YamlBodyField(forms.ModelForm):
+#     class Meta:
+#         model = PipelineYaml
+#         widgets = {
+#             "body": django_ace.AceWidget(mode="yaml", theme="twilight"),
+#         }
+#         fields = "__all__"
 
 
 class SpecYamlsInline(admin.StackedInline):
@@ -39,11 +45,17 @@ class SpecYamlsInline(admin.StackedInline):
 @admin.register(PipelineYaml)
 class PipelineYamlAdmin(admin.ModelAdmin):
     list_display = ("name", "description")
-    form = YamlBodyField
+    form = PipelineYamlForm
     fields = ["name", "description", "body"]
-    inlines = [SpecYamlsInline,]
-    actions = ["validate_input_output_matching", "validate_models_loading_by_name", "run_pipeline"]
-    
+    inlines = [
+        SpecYamlsInline,
+    ]
+    actions = [
+        "validate_input_output_matching",
+        "validate_models_loading_by_name",
+        "run_pipeline",
+    ]
+
     @admin.action(description="Validate modules input and output matching")
     def validate_input_output_matching(self, request, queryset):
         self.message_user(
@@ -51,7 +63,7 @@ class PipelineYamlAdmin(admin.ModelAdmin):
             "All later inputs can be satified by earlier outputs successfully.",
             messages.SUCCESS,
         )
-        
+
     @admin.action(description="Validate all models can be loaded by name.")
     def validate_models_loading_by_name(self, request, queryset):
         self.message_user(
@@ -64,14 +76,14 @@ class PipelineYamlAdmin(admin.ModelAdmin):
 @admin.register(SpecYaml)
 class SpecYamlAdmin(admin.ModelAdmin):
     list_display = ("name", "description")
-    form = YamlBodyField
+    form = SpecYamlForm
 
 
 @admin.register(PipelineRun)
 class PipelineRunAdmin(admin.ModelAdmin):
     list_display = ("pipeline_yaml", "version", "workflow")
     actions = ["run_pipeline"]
-    
+
     @admin.action(description="Run pipeline")
     def run_pipeline(self, request, queryset):
         for pipeline_run in queryset:
