@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  db:
+    image: postgres:13
+    container_name: postgres_container
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    networks:
+      - pipeline_network
+
+  web:
+    build: .
+    container_name: pipeline_container
+    command: python ./generic_pipeline/manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    networks:
+      - pipeline_network
+
+networks:
+  pipeline_network:
+    driver: bridge
