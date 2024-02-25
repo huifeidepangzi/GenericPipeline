@@ -2,3 +2,5 @@ Django==4.2.10
 django-stubs==4.2.7
 psycopg2==2.9.9
 django-ace==1.32.4
+mypy==1.8.0
+PyYAML==6.0.1
