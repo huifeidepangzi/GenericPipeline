@@ -14,12 +14,12 @@ from pipeline_configuration.models import (
 
 @admin.register(Workflow)
 class WorkflowAdmin(admin.ModelAdmin):
-    list_display = ("name",)
+    list_display = ("name", "description")
 
 
 @admin.register(Version)
 class VersionAdmin(admin.ModelAdmin):
-    list_display = ("number",)
+    list_display = ("number", "description")
 
 
 # class YamlBodyField(forms.ModelForm):
@@ -75,7 +75,7 @@ class PipelineYamlAdmin(admin.ModelAdmin):
 
 @admin.register(SpecYaml)
 class SpecYamlAdmin(admin.ModelAdmin):
-    list_display = ("name", "description")
+    list_display = ("name", "description", "document_link")
     form = SpecYamlForm
 
 
