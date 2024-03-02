@@ -1,0 +1,30 @@
+{% extends 'admin/base.html' %}
+{% load static %}
+
+{% block extrahead %}
+  <style>
+    .django-blue-message {
+      border: 2px solid #417690; /* Django admin blue color */
+      color: #417690; /* Text color */
+      padding: 15px; /* Padding */
+      margin-bottom: 15px; /* Margin bottom */
+      border-radius: 10px; /* Adjust the value as needed for smoother corners */
+      max-width: 500px;
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+<div>
+  <div class="django-blue-message">
+    <p>Scan variable lifecycle tool allow user input a variable name, and will return a list of spec yaml ado numbers who use the variable as input or output variable.</p>
+  </div>
+  <form action="." method="post" enctype="multipart/form-data" target="_blank">
+    {{ form.as_p }} {% csrf_token %}
+
+    <input type="submit" value="Scan lifecycle" class="default">
+  </form>
+</div>
+<br />
+
+{% endblock %}

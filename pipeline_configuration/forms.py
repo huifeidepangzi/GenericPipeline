@@ -68,3 +68,9 @@ class SpecYamlForm(forms.ModelForm):
             "body": django_ace.AceWidget(mode="yaml", theme="twilight"),
         }
         fields = "__all__"
+
+
+class VariableLifecycleScanForm(forms.Form):
+    variable_name = forms.CharField(min_length=1)
+    
+    
