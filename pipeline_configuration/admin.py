@@ -1,7 +1,11 @@
 from django.contrib import admin
 from django.contrib import messages
 from django.contrib import admin
-from pipeline_configuration.forms import PipelineYamlForm, SpecYamlForm
+from django.shortcuts import render
+from django.urls import path
+import yaml
+from yaml import SafeLoader
+from pipeline_configuration.forms import PipelineYamlForm, SpecYamlForm, VariableLifecycleScanForm
 from pipeline_configuration.models import (
     PipelineExecutionRecord,
     Workflow,
@@ -55,6 +59,48 @@ class PipelineYamlAdmin(admin.ModelAdmin):
         "validate_models_loading_by_name",
         "run_pipeline",
     ]
+    change_form_template  = "change_form.html"
+
+    def get_urls(self):
+        urls = super().get_urls()
+        custom_urls = [
+            # path('change/scan-variable-lifecycle/', self.scan_variable_lifecycle),
+            path('<int:pk>/change/scan-variable-lifecycle/', self.scan_variable_lifecycle),
+        ]
+        return custom_urls + urls
+    
+    def scan_variable_lifecycle(self, request, pk):
+        if request.method == "POST":
+            target_variable_name = request.POST["variable_name"]
+            matched_specs = []
+            pipeline_yaml_instance = PipelineYaml.objects.get(id=pk)
+            for spec in pipeline_yaml_instance.specyamls.order_by("name").all():
+                spec_yaml_dict = yaml.load(spec.body, Loader=SafeLoader)
+                for form in spec_yaml_dict["input_variables"]:
+                    for fields in form.values():
+                        for field in fields:
+                            for field_name in field.keys():
+                                if field_name == target_variable_name:
+                                    matched_specs.append(f"{spec.name}.input.{target_variable_name}")
+
+                for form in spec_yaml_dict["output_variables"]:
+                    for fields in form.values():
+                        for field in fields:
+                            for field_name in field.keys():
+                                if field_name == target_variable_name:
+                                    matched_specs.append(f"{spec.name}.output.{target_variable_name}")
+            payload = {
+                "scan_results": matched_specs
+            }
+            return render(
+                request, "scan_variable_lifecycle_result.html", payload
+            )
+
+        form = VariableLifecycleScanForm()
+        payload = {"form": form}
+        return render(
+            request, "scan_variable_lifecycle.html", payload
+        )
 
     @admin.action(description="Validate modules input and output matching")
     def validate_input_output_matching(self, request, queryset):

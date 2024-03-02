@@ -54,11 +54,14 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = "generic_pipeline.urls"
+ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [
+            os.path.join(ROOT, 'pipeline_configuration', 'templates'),
+        ],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [

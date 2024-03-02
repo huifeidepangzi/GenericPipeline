@@ -18,17 +18,12 @@ Including another URLconf
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import path
+from django.urls import include, path
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    # path("pipeline_configuration", include("mychatbot.urls"))
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-# urlpatterns = [
-#     # path('admin/filebrowser/', site.urls),
-#     path("admin/", admin.site.urls),
-# ]
-# only for development server. File serving will be automatically disabled when DEBUG=False
-# urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 admin.site.site_header = "Generic pipeline administration"
 admin.site.site_title = "Generic pipeline"

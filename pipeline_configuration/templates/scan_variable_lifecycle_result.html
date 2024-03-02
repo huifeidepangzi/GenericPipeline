@@ -1,0 +1,15 @@
+{% extends 'admin/base.html' %}
+{% load static %}
+
+{% block content %}
+<div>
+    <h1>Variable lifecycle:</h1>
+    <ul>
+        {% for item in scan_results %}
+            <li>{{ item }}</li>
+        {% endfor %}
+    </ul>
+</div>
+<br />
+
+{% endblock %}
