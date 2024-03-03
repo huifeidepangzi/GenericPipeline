@@ -73,4 +73,10 @@ class SpecYamlForm(forms.ModelForm):
 class VariableLifecycleScanForm(forms.Form):
     variable_name = forms.CharField(min_length=1)
     
-    
+
+class YAMLDisplayForm(forms.Form):
+    yaml_text = forms.CharField(
+        widget=forms.Textarea(
+            attrs={"rows": 10, "cols": 84, "readonly": "readonly"}
+        )
+    )

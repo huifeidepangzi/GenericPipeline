@@ -6,11 +6,25 @@
     .django-blue-message {
       border: 2px solid #417690; /* Django admin blue color */
       color: #417690; /* Text color */
-      padding: 15px; /* Padding */
+      padding: 30px; /* Padding */
       margin-bottom: 15px; /* Margin bottom */
       border-radius: 10px; /* Adjust the value as needed for smoother corners */
-      max-width: 500px;
+      {% comment %} max-width: 500px; {% endcomment %}
     }
+
+    .column {
+      float: left;
+      width: "50%";
+      padding: 50px;
+    }
+
+    /* Clear floats after the columns */
+    .row::after {
+        content: "";
+        clear: both;
+        display: table;
+    }
+    
   </style>
 {% endblock %}
 
@@ -19,16 +33,30 @@
   <div class="django-blue-message">
     <p>Scan variable lifecycle tool allow user input a variable name, and will return a list of spec yaml ado numbers who use the variable as input or output variable.</p>
   </div>
-  <form action="#" enctype="multipart/form-data" class="lifecycle-collection-form">
-    {{ form.as_p }} {% csrf_token %}
-    
-    <input type="submit" value="Scan lifecycle" class="default variable-name">
-  </form>
+  
+
+  <div class="row">
+    <div class="column">
+      <h2>Pipeline YAML file:</h2>
+      {{ yaml_display_form.yaml_text }}
+    </div>
+    <div class="column">
+      <h2> </h2>
+      <form action="#" enctype="multipart/form-data" class="lifecycle-collection-form">
+        {{ scan_form.as_p }} {% csrf_token %}
+        
+        <input type="submit" value="Scan lifecycle" class="default variable-name">
+      </form>
+      <h2>Scan result:</h2>
+      <div class="scan-result-section"></div>
+    </div>
+  </div>
+  
+
 </div>
 <br />
 
-<h2>Scan result:</h2>
-<div class="scan-result-section"></div>
+
 {% endblock %}
 
 

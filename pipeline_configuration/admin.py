@@ -6,7 +6,12 @@ from django.shortcuts import render
 from django.urls import path
 import yaml
 from yaml import SafeLoader
-from pipeline_configuration.forms import PipelineYamlForm, SpecYamlForm, VariableLifecycleScanForm
+from pipeline_configuration.forms import (
+    PipelineYamlForm,
+    SpecYamlForm,
+    VariableLifecycleScanForm,
+    YAMLDisplayForm,
+)
 from pipeline_configuration.models import (
     PipelineExecutionRecord,
     Workflow,
@@ -25,15 +30,6 @@ class WorkflowAdmin(admin.ModelAdmin):
 @admin.register(Version)
 class VersionAdmin(admin.ModelAdmin):
     list_display = ("number", "description")
-
-
-# class YamlBodyField(forms.ModelForm):
-#     class Meta:
-#         model = PipelineYaml
-#         widgets = {
-#             "body": django_ace.AceWidget(mode="yaml", theme="twilight"),
-#         }
-#         fields = "__all__"
 
 
 class SpecYamlsInline(admin.StackedInline):
@@ -60,23 +56,31 @@ class PipelineYamlAdmin(admin.ModelAdmin):
         "validate_models_loading_by_name",
         "run_pipeline",
     ]
-    change_form_template  = "change_form.html"
+    change_form_template = "change_form.html"
 
     def get_urls(self):
         urls = super().get_urls()
         custom_urls = [
-            path('<int:pk>/change/scan-variable-lifecycle/', self.scan_variable_lifecycle),
-            path('<int:pk>/change/scan-variable-lifecycle/collect-lifecycle-info/', self.collect_lifecycle_info),
+            path(
+                "<int:pk>/change/scan-variable-lifecycle/", self.scan_variable_lifecycle
+            ),
+            path(
+                "<int:pk>/change/scan-variable-lifecycle/collect-lifecycle-info/",
+                self.collect_lifecycle_info,
+            ),
         ]
         return custom_urls + urls
-    
+
     def scan_variable_lifecycle(self, request, pk):
-        form = VariableLifecycleScanForm()
-        payload = {"form": form}
-        return render(
-            request, "scan_variable_lifecycle.html", payload
+        pipeline_yaml_instance = PipelineYaml.objects.get(id=pk)
+        yaml_display_form = YAMLDisplayForm(
+            initial={"yaml_text": pipeline_yaml_instance.body}
         )
-        
+
+        scan_form = VariableLifecycleScanForm()
+        payload = {"scan_form": scan_form, "yaml_display_form": yaml_display_form}
+        return render(request, "scan_variable_lifecycle.html", payload)
+
     def collect_lifecycle_info(self, request, pk):
         target_variable_name = request.GET["variable_name"]
         matched_specs = []
@@ -88,14 +92,21 @@ class PipelineYamlAdmin(admin.ModelAdmin):
                     for field in fields:
                         for field_name in field.keys():
                             if field_name == target_variable_name:
-                                matched_specs.append(f"{spec.name}.input.{target_variable_name}")
+                                matched_specs.append(
+                                    f"{spec.name}.input.{target_variable_name}"
+                                )
 
             for form in spec_yaml_dict["output_variables"]:
                 for fields in form.values():
                     for field in fields:
                         for field_name in field.keys():
                             if field_name == target_variable_name:
-                                matched_specs.append(f"{spec.name}.output.{target_variable_name}")
+                                matched_specs.append(
+                                    f"{spec.name}.output.{target_variable_name}"
+                                )
+
+        if not matched_specs:
+            matched_specs.append("Variable name not found.")
 
         return JsonResponse({"scan_results": matched_specs})
 
