@@ -1,0 +1,11 @@
+.admin-tool-section {
+    border-top: 1px solid #272727;
+    border-bottom: 1px solid #272727;
+    padding: 15px 0;
+}
+
+.admin-tool-title {
+    width: 160px;
+    font-weight: bold;
+    padding: 10px;
+}
