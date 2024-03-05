@@ -2,6 +2,7 @@
 {% load static %}
 
 {% block extrahead %}
+  {{ block.super }}
   <link rel="stylesheet" type="text/css" href="{% static 'management_tool.css' %}">
 {% endblock %}
 
@@ -11,7 +12,6 @@
     <p>Scan variable lifecycle tool allow user input a variable name, and will return a list of spec yaml ado numbers who use the variable as input or output variable.</p>
   </div>
   
-
   <div class="row">
     <div class="column">
       <h2>Pipeline YAML file:</h2>
@@ -28,35 +28,11 @@
       <div class="scan-result-section"></div>
     </div>
   </div>
-  
-
 </div>
 <br />
-
-
 {% endblock %}
 
-
 {% block footer %}
-  <script>
-    const lifecycleScanForm = document.querySelector('.lifecycle-collection-form');
-    
-    lifecycleScanForm.addEventListener('submit', function (e) {
-      e.preventDefault()
-      var formData = new FormData(this);
-      const scanLifecycleInfoURL = 'collect-lifecycle-info/?variable_name=' + formData.get("variable_name");
-
-      // Access form data
-      fetch(scanLifecycleInfoURL, {
-          method: 'GET',
-          headers: {
-          },
-      }).then(response => {
-          response.json().then(data => {
-            var scanResultElement = document.querySelector(".scan-result-section");
-            scanResultElement.innerText = data.scan_results.join("\n");
-          })
-      });
-    })
-  </script>
+  {{ block.super }}
+  <script src="{% static 'scan_variable_lifecycle.js' %}"></script>
 {% endblock %}
