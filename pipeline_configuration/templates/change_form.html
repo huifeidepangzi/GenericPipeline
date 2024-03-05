@@ -1,10 +1,14 @@
 {% extends 'admin/change_form.html' %}
 {% load static %}
 
+{% block extrahead %}
+  <link rel="stylesheet" type="text/css" href="{% static 'change_form.css' %}">
+{% endblock %}
+
 {% block object-tools %}
     {{ block.super }}
-    <div style="border-top: 1px solid #272727;border-bottom: 1px solid #272727;padding: 15px 0" class="flex-container">
-        <label style="width: 160px;font-weight: bold;padding: 10px;">Tools:</label>
+    <div class="flex-container admin-tool-section">
+        <label class="admin-tool-title">Tools:</label>
         <div id="id_name" style="padding: 10px;">
             <a href="scan-variable-lifecycle/">Scan variable lifecycle</a>
         </div>
