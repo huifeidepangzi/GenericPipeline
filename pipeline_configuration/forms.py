@@ -17,12 +17,12 @@ class PipelineYamlForm(forms.ModelForm):
         yaml_dict = yaml.load(self.cleaned_data["body"], Loader=SafeLoader)
         if "name" not in yaml_dict:
             validation_errors.append(
-                forms.ValidationError("Name field is missing.", code="MISSED_NAME")
+                forms.ValidationError("name field is missing.", code="MISSED_NAME")
             )
 
         if "stages" not in yaml_dict:
             validation_errors.append(
-                forms.ValidationError("Specs field is missing.", code="MISSED_SPECS")
+                forms.ValidationError("stages field is missing.", code="MISSED_STAGES")
             )
         else:
             for index, stage in enumerate(yaml_dict["stages"]):
