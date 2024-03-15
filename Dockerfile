@@ -13,3 +13,5 @@ COPY . /app
 
 # Collect all static files
 RUN python /app/manage.py collectstatic
+
+# EXPOSE 8000
