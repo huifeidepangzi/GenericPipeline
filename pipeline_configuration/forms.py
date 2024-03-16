@@ -1,5 +1,5 @@
 from yaml import SafeLoader
-from pipeline_configuration.models import PipelineYaml, SpecYaml
+from pipeline_configuration.models import PipelineYaml, PipelineYamlHistory, SpecYaml
 from django import forms
 import django_ace  # type: ignore
 import yaml
@@ -55,6 +55,15 @@ class PipelineYamlForm(forms.ModelForm):
 
     class Meta:
         model = PipelineYaml
+        widgets = {
+            "body": django_ace.AceWidget(mode="yaml", theme="twilight"),
+        }
+        fields = "__all__"
+        
+        
+class PipelineYamlHistoryForm(forms.ModelForm):
+    class Meta:
+        model = PipelineYamlHistory
         widgets = {
             "body": django_ace.AceWidget(mode="yaml", theme="twilight"),
         }

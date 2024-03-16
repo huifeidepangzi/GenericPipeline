@@ -1,6 +1,6 @@
 from enum import Enum
 from django.db import models
-
+from django.contrib.auth.models import User
 
 class Workflow(models.Model):
     name = models.CharField(max_length=50, unique=True)
@@ -70,7 +70,26 @@ class PipelineExecutionRecord(models.Model):
     pipeline_yaml = models.ForeignKey(
         PipelineYaml, null=True, blank=False, on_delete=models.SET_NULL
     )
-    logs = models.FileField(null=True, default=None)
+    # logs = models.FileField(null=True, default=None)
+    job_id = models.CharField(unique=True, blank=False, null=False, max_length=100)
+    link = models.URLField(null=True, blank=True, default="")
 
     def __str__(self):
         return str(self.pipeline_yaml.name + " triggered at " + str(self.triggered_at))
+
+
+class SecretToken(models.Model):
+    name = models.CharField(max_length=100, blank=False, null=False, unique=True)
+    token = models.CharField(max_length=200, blank=False, null=False, unique=True)
+    description = models.TextField(blank=True)
+
+    def __str__(self):
+        return self.token
+    
+    
+class PipelineYamlHistory(models.Model):
+    name = models.CharField(max_length=50, unique=True, blank=False, null=False)
+    description = models.CharField(max_length=200, blank=True)
+    body = models.TextField(blank=False, null=False)
+    changed_at = models.DateTimeField(auto_now=True)
+    changed_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
