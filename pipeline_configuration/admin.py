@@ -4,23 +4,27 @@ from django.contrib import admin
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.urls import path
+import requests
 import yaml
 from yaml import SafeLoader
 from pipeline_configuration.forms import (
     PipelineYamlForm,
+    PipelineYamlHistoryForm,
     SpecYamlForm,
     VariableLifecycleScanForm,
     YAMLDisplayForm,
 )
 from pipeline_configuration.models import (
     PipelineExecutionRecord,
+    PipelineYamlHistory,
+    SecretToken,
     Workflow,
     Version,
     PipelineRun,
     PipelineYaml,
     SpecYaml,
 )
-
+from django.utils.html import format_html
 
 @admin.register(Workflow)
 class WorkflowAdmin(admin.ModelAdmin):
@@ -57,6 +61,17 @@ class PipelineYamlAdmin(admin.ModelAdmin):
         "run_pipeline",
     ]
     change_form_template = "change_form.html"
+    
+    def save_model(self, request, obj, form, change):
+        super().save_model(request, obj, form, change)
+        
+        if request.user.is_authenticated:
+            PipelineYamlHistory.objects.create(
+                name=obj.name,
+                description=obj.description,
+                body=obj.body,
+                changed_by=request.user,
+            )
 
     def get_urls(self):
         urls = super().get_urls()
@@ -140,11 +155,33 @@ class PipelineRunAdmin(admin.ModelAdmin):
 
     @admin.action(description="Run pipeline")
     def run_pipeline(self, request, queryset):
+        gitlab_token = SecretToken.objects.get(name="GITLAB_JOB_TRIGGER_TOKEN")
+        # URL of the endpoint you want to send the POST request to
+        url = 'https://gitlab.com/api/v4/projects/55799180/trigger/pipeline'
+
+        # JSON data to be sent in the POST request
+        data = {
+            "token": gitlab_token.token,
+            "ref": "main",
+            "variables": {"JOB_TYPE": "JOB_1"}
+        }
+
+        # Send the POST request with JSON data
+        response = requests.post(url, json=data)
+
+        # Check the response status code
+        # if response.status_code == 200:
+        #     print('POST request successful!')
+        # else:
+        #     print(f'Failed to send POST request. Status code: {response.status_code}')
+        
         for pipeline_run in queryset:
             PipelineExecutionRecord.objects.create(
                 status="COMPLETED",
                 pipeline_yaml=pipeline_run.pipeline_yaml,
                 pipeline_run=pipeline_run,
+                job_id=response.json()["id"],
+                link=f"https://gitlab.com{response.json()['detailed_status']['details_path']}"
             )
             self.message_user(
                 request,
@@ -155,6 +192,26 @@ class PipelineRunAdmin(admin.ModelAdmin):
 
 @admin.register(PipelineExecutionRecord)
 class PipelineExecutionRecordAdmin(admin.ModelAdmin):
-    list_display = ("triggered_at", "finished_at", "status")
-    fields = ("triggered_at", "finished_at", "status", "pipeline_run", "pipeline_yaml")
-    readonly_fields = ("triggered_at", "finished_at")
+    list_display = ("triggered_at", "finished_at", "status", "job_id", "job_link")
+    fields = ("triggered_at", "finished_at", "status", "pipeline_run", "pipeline_yaml", "job_id", "job_link")
+    readonly_fields = ("triggered_at", "finished_at", "job_id", "job_link")
+    
+    def job_link(self, instance):
+        return format_html(
+            '<a href="{0}" target="_blank">{1}</a>',
+            instance.link,
+            instance.link,
+        )
+
+
+@admin.register(SecretToken)
+class SecretTokenAdmin(admin.ModelAdmin):
+    list_display = ("name",)
+    
+    
+@admin.register(PipelineYamlHistory)
+class PipelineYamlHistoryAdmin(admin.ModelAdmin):
+    list_display = ("name", "description", "changed_at", "changed_by")
+    form = PipelineYamlHistoryForm
+    fields = ["name", "description", "body", "changed_at", "changed_by"]
+    readonly_fields = ["changed_at", "changed_by"]
