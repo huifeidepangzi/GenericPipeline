@@ -6,12 +6,6 @@ import yaml
 
 
 class PipelineYamlForm(forms.ModelForm):
-    class Meta:
-        model = PipelineYaml
-        exclude = [
-            id,
-        ]
-
     def clean(self):
         validation_errors = []
         yaml_dict = yaml.load(self.cleaned_data["body"], Loader=SafeLoader)
