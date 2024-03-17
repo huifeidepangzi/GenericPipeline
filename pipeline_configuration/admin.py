@@ -159,11 +159,13 @@ class PipelineRunAdmin(admin.ModelAdmin):
         # URL of the endpoint you want to send the POST request to
         url = 'https://gitlab.com/api/v4/projects/55799180/trigger/pipeline'
 
+        run_yaml = queryset.get().pipeline_yaml.body
+
         # JSON data to be sent in the POST request
         data = {
             "token": gitlab_token.token,
             "ref": "main",
-            "variables": {"JOB_TYPE": "JOB_1"}
+            "variables": {"JOB_TYPE": "JOB_1", "pipeline_yaml": run_yaml}
         }
 
         # Send the POST request with JSON data
