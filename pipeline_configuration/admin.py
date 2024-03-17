@@ -26,6 +26,8 @@ from pipeline_configuration.models import (
 )
 from django.utils.html import format_html
 
+from pipeline_configuration.utils.yaml_tools import yaml_to_json
+
 @admin.register(Workflow)
 class WorkflowAdmin(admin.ModelAdmin):
     list_display = ("name", "description")
@@ -159,7 +161,7 @@ class PipelineRunAdmin(admin.ModelAdmin):
         # URL of the endpoint you want to send the POST request to
         url = 'https://gitlab.com/api/v4/projects/55799180/trigger/pipeline'
 
-        run_yaml = queryset.get().pipeline_yaml.body
+        run_yaml = yaml_to_json(queryset.get().pipeline_yaml.body)
 
         # JSON data to be sent in the POST request
         data = {
