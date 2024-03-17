@@ -53,12 +53,13 @@ class PipelineRun(models.Model):
 class PipelineExecutionRecord(models.Model):
     class PipelineExecutionStatus(models.TextChoices):
         PENDING = "PENDING", "PENDING"
+        TRIGGERED = "TRIGGERED", "TRIGGERED"
         COMPLETED = "COMPLETED", "COMPLETED"
         FAILED = "FAILED", "FAILED"
         ERROR = "ERROR", "ERROR"
 
     triggered_at = models.DateTimeField(auto_now=True)
-    finished_at = models.DateTimeField(auto_now=True)
+    finished_at = models.DateTimeField(null=True, blank=True, default=None)
     status = models.CharField(
         max_length=255,
         choices=PipelineExecutionStatus.choices,
