@@ -177,7 +177,7 @@ class PipelineRunAdmin(admin.ModelAdmin):
         
         for pipeline_run in queryset:
             PipelineExecutionRecord.objects.create(
-                status="COMPLETED",
+                status="TRIGGERED",
                 pipeline_yaml=pipeline_run.pipeline_yaml,
                 pipeline_run=pipeline_run,
                 job_id=response.json()["id"],
