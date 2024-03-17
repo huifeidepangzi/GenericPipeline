@@ -162,6 +162,7 @@ class PipelineRunAdmin(admin.ModelAdmin):
         url = 'https://gitlab.com/api/v4/projects/55799180/trigger/pipeline'
 
         run_yaml = yaml_to_json(queryset.get().pipeline_yaml.body)
+        run_yaml = run_yaml.replace(" ", "").replace('"', '\"')
 
         # JSON data to be sent in the POST request
         data = {
