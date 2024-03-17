@@ -26,6 +26,8 @@ from pipeline_configuration.models import (
 )
 from django.utils.html import format_html
 
+from pipeline_configuration.utils.yaml_tools import yaml_to_json
+
 @admin.register(Workflow)
 class WorkflowAdmin(admin.ModelAdmin):
     list_display = ("name", "description")
@@ -165,7 +167,7 @@ class PipelineRunAdmin(admin.ModelAdmin):
         data = {
             "token": gitlab_token.token,
             "ref": "main",
-            "variables": {"JOB_TYPE": "JOB_1", "pipeline_yaml": run_yaml}
+            "variables": {"JOB_TYPE": "JOB_1", "pipeline_yaml": yaml_to_json(run_yaml)}
         }
 
         # Send the POST request with JSON data
