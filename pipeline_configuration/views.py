@@ -1,3 +1,4 @@
+from datetime import datetime
 from rest_framework import generics
 from pipeline_configuration.models import PipelineExecutionRecord
 from rest_framework.permissions import IsAuthenticated
@@ -20,5 +21,8 @@ class ExecutionRecordUpdateStatusView(generics.UpdateAPIView):
         serializer.is_valid(raise_exception=True)
         
         instance.status = serializer.validated_data["status"]
+        if instance.status == "COMPLETED":
+            instance.finished_at = datetime.now()
         instance.save()
+
         return Response(serializer.data)
