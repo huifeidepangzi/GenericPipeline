@@ -89,7 +89,7 @@ class SecretToken(models.Model):
     
     
 class PipelineYamlHistory(models.Model):
-    name = models.CharField(max_length=50, unique=True, blank=False, null=False)
+    name = models.CharField(max_length=50, blank=False, null=False)
     description = models.CharField(max_length=200, blank=True)
     body = models.TextField(blank=False, null=False)
     changed_at = models.DateTimeField(auto_now=True)
