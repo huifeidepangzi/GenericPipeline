@@ -53,13 +53,13 @@ class PipelineYamlForm(forms.ModelForm):
                             code="SPEC_MODEL_UNLINKED",
                         )
                     )
-                if "tags" not in stage:
-                    validation_errors.append(
-                        forms.ValidationError(
-                            f"Tags field is missing in {index + 1} spec.",
-                            code="MISSED_TAGS",
-                        )
-                    )
+                # if "tags" not in stage:
+                #     validation_errors.append(
+                #         forms.ValidationError(
+                #             f"Tags field is missing in {index + 1} spec.",
+                #             code="MISSED_TAGS",
+                #         )
+                #     )
 
         if validation_errors:
             raise forms.ValidationError(validation_errors)

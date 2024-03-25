@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import List
 from rest_framework import generics
 import yaml
-from pipeline_configuration.models import PipelineExecutionRecord, PipelineYaml
+from pipeline_configuration.models import PipelineExecutionRecord, PipelineYaml, SpecYaml
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.response import Response
@@ -13,15 +13,15 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 
-class DragAndDropView(APIView):
+class AddPipelineView(APIView):
     renderer_classes = [TemplateHTMLRenderer]
-    template_name = "drag_and_drop.html"
+    template_name = "add_pipeline.html"
 
     def get(self, request):
-        first_pipeline_yaml = PipelineYaml.objects.all().first()
+        # first_pipeline_yaml = PipelineYaml.objects.all().first()
         spec_details = []
         
-        for spec_yaml in first_pipeline_yaml.specyamls.all():
+        for spec_yaml in SpecYaml.objects.all().order_by("name"):
             spec_details.append({
                 "name": spec_yaml.name,
                 "description": spec_yaml.description,
@@ -33,21 +33,22 @@ class DragAndDropView(APIView):
         # return Response({"spec_names": [stage["spec"] for stage in pipeline_yaml_body["stages"]]})
     
     def post(self, request):
-        print("111111111111111111111")
-        print(request.POST)
-        spec_names = request.data.get("spec_names")
-        latest_id = int(PipelineYaml.objects.all().last().id)
+        # print("111111111111111111111")
+        # print(request.POST)
+        # spec_names = request.data.get("spec_names")
+        # latest_id = int(PipelineYaml.objects.all().last().id)
+        print("111111111111111111111111")
+        print(request.data)
         yaml_body_dict = {
-            "name": f"pipeline yaml {latest_id+1}", 
+            "name": request.data.get("pipeline_name"), 
             "stages": [{
-                "desc": "fake description",
-                "tags": "fake tag",
-                "spec": name,
-            } for name in spec_names
+                "desc": SpecYaml.objects.get(name=name).description,
+                "spec": SpecYaml.objects.get(name=name).name,
+            } for name in request.data.get("spec_names")
         ]}
         PipelineYaml.objects.create(
-            name=f"pipeline yaml {latest_id+1}",
-            description="fake description",
+            name=request.data.get("pipeline_name"),
+            description=request.data.get("pipeline_description"),
             body=yaml.dump(yaml_body_dict, indent=4, sort_keys=False)
         )
         return Response({'message': 'POST request received'}, status=status.HTTP_200_OK)

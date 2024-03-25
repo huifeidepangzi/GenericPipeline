@@ -1,11 +1,13 @@
-const newYamlCreationForm = document.querySelector(".new-yaml-creation-form");
+const newYamlCreationForm = document.querySelector("#new-yaml-creation-form");
 
 
 newYamlCreationForm.addEventListener('submit', function (e) {
   e.preventDefault()
-  const newYamlCreationURL = 'pipeline_configuration/drag_and_drop/';
+  // const newYamlCreationURL = 'pipeline_configuration/add_pipeline/';
   var stepNames = [];
-  var businessSteps = document.getElementById("business-steps").querySelectorAll(".task");
+  var businessSteps = document.getElementById("business-steps").querySelectorAll(".card-header");
+  var pipeline_name = document.getElementById("new-pipeline-name").value;
+  var pipeline_description = document.getElementById("new-pipeline-description").value;
   console.log(businessSteps);
 
   businessSteps.forEach(function(step) {
@@ -13,7 +15,9 @@ newYamlCreationForm.addEventListener('submit', function (e) {
   });
   console.log(stepNames);
   var postData = {
-    'spec_names': stepNames
+    "spec_names": stepNames,
+    "pipeline_name": pipeline_name,
+    "pipeline_description": pipeline_description,
   };
 
   fetch('', {

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extrahead %}
+  {{ block.super }}
+  <link rel="stylesheet" type="text/css" href="{% static 'drag_and_drop.css' %}">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+{% endblock %}
+
+{% block content %}
+  <div class="board">
+    {% comment %} <form id="todo-form">
+      <input type="text" placeholder="New TODO..." id="todo-input" />
+      <button type="submit">Add +</button>
+    </form> {% endcomment %}
+    <form id="new-yaml-creation-form">
+      <div class="mb-3">
+        <label for="new-pipeline-name" class="form-label">Name</label>
+        <input type="text" class="form-control" id="new-pipeline-name" placeholder="Name...">
+      </div>
+      <div class="mb-3">
+        <label for="new-pipeline-description" class="form-label">Description</label>
+        <textarea class="form-control" id="new-pipeline-description" rows="3"></textarea>
+      </div>
+      {% comment %} <input type="text" placeholder="Name..." id="new-pipeline-name" style="width: 300px;"/>
+      <input type="text" placeholder="description..." id="new-pipeline-description" style="width: 300px;"/>
+      <input type="hidden" id="spec-names" value="" /> {% endcomment %}
+      {% comment %} <input class="btn btn-primary" type="submit" value="Submit" /> {% endcomment %}
+      {% comment %} <input type="text" placeholder="description..." id="new-pipeline-description" display/> {% endcomment %}
+      <div class="lanes">
+        {% comment %} <div class="swim-lane" id="generic-steps">
+          <h3 class="heading">Generic steps</h3>
+        </div> {% endcomment %}
+        <div class="swim-lane" id="business-steps">
+          <h3 class="heading">Business logic steps</h3>
+        </div>
+        <div class="swim-lane" id="steps-to-choose">
+          <h3 class="heading">Steps to choose</h3>
+          {% for spec_detail in spec_details %}
+            {% comment %} <p class="task" draggable="true" value="{{name}}">
+              {{ name }}
+            </p> {% endcomment %}
+            {% comment %} <button class="btn btn-primary task" draggable="true" type="button" value="{{ spec_detail.name }}" data-bs-toggle="collapse" data-bs-target="#{{spec_detail.name}}-details" aria-expanded="false" aria-controls="collapseExample">
+              {{ spec_detail.name }}
+            </button> {% endcomment %}
+            {% comment %} <div class="card task" draggable="true">
+              <div class="card-body" value="{{ spec_detail.name }}">
+                <h5 class="card-title">{{ spec_detail.name }}</h5>
+                <p class="card-text">{{ spec_detail.description }}</p>
+                <a href="{{ spec_detail.doc_link }}" target="_blank" class="card-link">Document</a>
+                <a href="#" target="_blank" class="card-link">Admin</a>
+              </div>
+            </div> {% endcomment %}
+            <div class="card task text-bg-light mb-3" draggable="true">
+              <div class="card-header text-bg-dark" value="{{ spec_detail.name }}">{{ spec_detail.name | upper}}</div>
+              <div class="card-body">
+                {% comment %} <h5 class="card-title">Success card title</h5> {% endcomment %}
+                <p class="card-text">{{ spec_detail.description }}</p>
+              </div>
+              <div class="card-footer bg-transparent">
+                <a href="{{ spec_detail.doc_link }}" target="_blank" class="card-link">Document</a>
+                <a href="#" target="_blank" class="card-link">Admin</a>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+      <button type="submit" class="btn btn-secondary btn-lg">Save</button>
+    </form>
+
+
+{% endblock %}
+
+{% block footer %}
+  {{ block.super }}
+  <script src="{% static 'drag_and_drop.js' %}"></script>
+  <script src="{% static 'add_new_card.js' %}"></script>
+  <script src="{% static 'save_new_workflow.js' %}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+{% endblock %}
