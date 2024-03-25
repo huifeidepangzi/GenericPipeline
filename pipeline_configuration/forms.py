@@ -19,6 +19,18 @@ class PipelineYamlForm(forms.ModelForm):
                 forms.ValidationError("stages field is missing.", code="MISSED_STAGES")
             )
         else:
+            all_spec_model_names = self.instance.specyamls.all().values_list("name", flat=True)
+            all_spec_names_in_yaml = [stage["spec"] for stage in yaml_dict["stages"]]
+            
+            for spec_model_name in all_spec_model_names:
+                if spec_model_name not in all_spec_names_in_yaml:
+                    validation_errors.append(
+                        forms.ValidationError(
+                            f"Spec {spec_model_name} is not in yaml body.",
+                            code="LINKED_SPEC_MISSING_IN_YAML_BODY",
+                        )
+                    )
+
             for index, stage in enumerate(yaml_dict["stages"]):
                 if "desc" not in stage:
                     validation_errors.append(
@@ -34,13 +46,20 @@ class PipelineYamlForm(forms.ModelForm):
                             code="MISSED_SPEC",
                         )
                     )
-                if "tags" not in stage:
+                elif stage["spec"] not in all_spec_model_names:
                     validation_errors.append(
                         forms.ValidationError(
-                            f"Tags field is missing in {index + 1} spec.",
-                            code="MISSED_TAGS",
+                            f"Spec {stage['spec']} is not linked to this pipeline yaml.",
+                            code="SPEC_MODEL_UNLINKED",
                         )
                     )
+                # if "tags" not in stage:
+                #     validation_errors.append(
+                #         forms.ValidationError(
+                #             f"Tags field is missing in {index + 1} spec.",
+                #             code="MISSED_TAGS",
+                #         )
+                #     )
 
         if validation_errors:
             raise forms.ValidationError(validation_errors)
@@ -66,7 +85,7 @@ class PipelineYamlHistoryForm(forms.ModelForm):
 
 class SpecYamlForm(forms.ModelForm):
     class Meta:
-        model = PipelineYaml
+        model = SpecYaml
         widgets = {
             "body": django_ace.AceWidget(mode="yaml", theme="twilight"),
         }

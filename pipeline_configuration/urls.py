@@ -3,5 +3,6 @@ from django.urls import include, path
 from . import views
 
 urlpatterns = [
-    path('update_job_status/<str:job_id>/', views.ExecutionRecordUpdateStatusView.as_view()),
+    path("add_pipeline/", views.AddPipelineView.as_view()),
+    path("update_job_status/<str:job_id>/", views.ExecutionRecordUpdateStatusView.as_view()),
 ]
