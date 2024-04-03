@@ -4,18 +4,26 @@ const newYamlCreationForm = document.querySelector("#new-yaml-creation-form");
 newYamlCreationForm.addEventListener('submit', function (e) {
   e.preventDefault()
   // const newYamlCreationURL = 'pipeline_configuration/add_pipeline/';
-  var stepNames = [];
-  var businessSteps = document.getElementById("business-steps").querySelectorAll(".card-header");
   var pipeline_name = document.getElementById("new-pipeline-name").value;
   var pipeline_description = document.getElementById("new-pipeline-description").value;
-  console.log(businessSteps);
 
-  businessSteps.forEach(function(step) {
-    stepNames.push(step.getAttribute("value"));
-  });
-  console.log(stepNames);
+  var swimLanes = document.getElementById("add-pipeline-lanes-section").querySelectorAll(".swim-lane");
+  var logicBlocks = {};
+
+  for (var i = 0; i < swimLanes.length; i++) {
+    var stepNames = [];
+    var swimLaneName = swimLanes[i].getAttribute("value");
+    var cardHeaders = swimLanes[i].querySelectorAll(".card-header");
+    
+    for (var j = 0; j < cardHeaders.length; j++) {
+      stepNames.push(cardHeaders[j].getAttribute("value"));
+    }
+  
+    logicBlocks[swimLaneName] = stepNames;
+  }
+
   var postData = {
-    "spec_names": stepNames,
+    "logic_blocks": logicBlocks,
     "pipeline_name": pipeline_name,
     "pipeline_description": pipeline_description,
   };
