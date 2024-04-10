@@ -102,25 +102,29 @@ class PipelineYamlAdmin(admin.ModelAdmin):
         target_variable_name = request.GET["variable_name"]
         matched_specs = []
         pipeline_yaml_instance = PipelineYaml.objects.get(id=pk)
-        for spec in pipeline_yaml_instance.specyamls.order_by("name").all():
-            spec_yaml_dict = yaml.load(spec.body, Loader=SafeLoader)
-            for form in spec_yaml_dict["input_variables"]:
-                for fields in form.values():
-                    for field in fields:
-                        for field_name in field.keys():
-                            if field_name == target_variable_name:
-                                matched_specs.append(
-                                    f"{spec.name}.input.{target_variable_name}"
-                                )
-
-            for form in spec_yaml_dict["output_variables"]:
-                for fields in form.values():
-                    for field in fields:
-                        for field_name in field.keys():
-                            if field_name == target_variable_name:
-                                matched_specs.append(
-                                    f"{spec.name}.output.{target_variable_name}"
-                                )
+        
+        yaml_body = yaml.load(pipeline_yaml_instance.body, Loader=SafeLoader)
+        for logic_block in yaml_body["logic_blocks"]:
+            for stage in logic_block["stages"]:
+                spec_yaml = SpecYaml.objects.get(name=stage["spec"])
+                spec_yaml_dict = yaml.load(spec_yaml.body, Loader=SafeLoader)
+                for form in spec_yaml_dict["input_variables"]:
+                    for fields in form.values():
+                        for field in fields:
+                            for field_name in field.keys():
+                                if field_name == target_variable_name:
+                                    matched_specs.append(
+                                        f"{logic_block['name']}.{spec_yaml.name}.input.{target_variable_name}"
+                                    )
+                                    
+                for form in spec_yaml_dict["output_variables"]:
+                    for fields in form.values():
+                        for field in fields:
+                            for field_name in field.keys():
+                                if field_name == target_variable_name:
+                                    matched_specs.append(
+                                        f"{logic_block['name']}.{spec_yaml.name}.Output.{target_variable_name}"
+                                    )
 
         if not matched_specs:
             matched_specs.append("Variable name not found.")
