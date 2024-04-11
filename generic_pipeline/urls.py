@@ -25,6 +25,7 @@ urlpatterns = [
     path('pipeline_configuration/', include("pipeline_configuration.urls")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
+admin.site.site_url = "/pipeline_configuration/add_pipeline/"
 admin.site.site_header = "Generic pipeline administration"
 admin.site.site_title = "Generic pipeline"
 admin.site.index_title = "Configuration management"

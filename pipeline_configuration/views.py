@@ -29,33 +29,37 @@ class AddPipelineView(APIView):
             })
             
         return Response({"spec_details": spec_details})
-        # pipeline_yaml_body = yaml.safe_load(PipelineYaml.objects.all().first().body)
-        # return Response({"spec_names": [stage["spec"] for stage in pipeline_yaml_body["stages"]]})
-    
+   
     def post(self, request):
-        # print("111111111111111111111")
-        # print(request.POST)
-        # spec_names = request.data.get("spec_names")
-        # latest_id = int(PipelineYaml.objects.all().last().id)
-        print("111111111111111111111111")
-        print(request.data)
+        logic_blocks = []
+        for logic_block_name, stage_names in request.data.get("logic_blocks").items():
+            logic_blocks.append({
+                "name": logic_block_name,
+                "stages": [{
+                    "desc": SpecYaml.objects.get(name=name).description,
+                    "spec": SpecYaml.objects.get(name=name).name,
+                } for name in stage_names],
+            })
+        
         yaml_body_dict = {
             "name": request.data.get("pipeline_name"), 
-            "stages": [{
-                "desc": SpecYaml.objects.get(name=name).description,
-                "spec": SpecYaml.objects.get(name=name).name,
-            } for name in request.data.get("spec_names")
-        ]}
-        PipelineYaml.objects.create(
+            "logic_blocks": logic_blocks,
+        }
+
+        new_pipeline_yaml = PipelineYaml.objects.create(
             name=request.data.get("pipeline_name"),
             description=request.data.get("pipeline_description"),
-            body=yaml.dump(yaml_body_dict, indent=4, sort_keys=False)
+            body=yaml.dump(yaml_body_dict, indent=4, sort_keys=False),
         )
+        
+        spec_yamls = SpecYaml.objects.filter(
+            name__in=[
+                stage["spec"] for lb in logic_blocks for stage in lb["stages"]
+            ]
+        )
+        new_pipeline_yaml.specyamls.set(spec_yamls)
+
         return Response({'message': 'POST request received'}, status=status.HTTP_200_OK)
-    # def get(self, request, pk):
-    #     profile = get_object_or_404(Profile, pk=pk)
-    #     serializer = ProfileSerializer(profile)
-    #     return Response({'serializer': serializer, 'profile': profile})
 
 
 class ExecutionRecordUpdateStatusView(generics.UpdateAPIView):
