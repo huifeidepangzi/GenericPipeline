@@ -34,14 +34,29 @@ newYamlCreationForm.addEventListener('submit', function (e) {
         'Content-Type': 'application/json'
     },
     body: JSON.stringify(postData)
+  }).then(response => {
+    var saveResultMessageLocation = document.getElementById("save-result-message");
+    if (response.ok) {
+        saveResultMessageLocation.innerHTML = `
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+          <strong>Pipeline yaml created successfully!</strong>
+          <button type="button" class="btn-close close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        `;
+    } else {
+      saveResultMessageLocation.innerHTML = `
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          <strong>Fail to create pipeline yaml!</strong>
+          <button type="button" class="btn-close close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        `;
+    }
+    
   })
-//   .then(response => {
-//     if (response.ok) {
-//         console.log('POST request successful');
-//         return response.text(); // or response.json() for JSON response
-//     }
-//     throw new Error('POST request failed');
-//   })
 //   .then(data => {
 //     console.log('Response:', data);
 //     // Handle response here
