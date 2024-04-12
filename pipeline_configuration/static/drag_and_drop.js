@@ -38,6 +38,15 @@ addNewColumnButton.addEventListener('click', function(event) {
     return;
   }
 
+  // Check whether the name of swim lane already exists
+  var swimLanes = document.querySelectorAll(".swim-lane");
+  for (var i = 0; i < swimLanes.length; i++) {
+    if (swimLanes[i].getAttribute("value") === columnName) {
+      alert('The name of the swim lane already exists. Please try a different name.');
+      return;
+    }
+  }
+
   // Prevent the form from submitting normally
   event.preventDefault();
 
