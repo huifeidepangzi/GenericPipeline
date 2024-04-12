@@ -1,0 +1,33 @@
+<div class="modal fade" id="stepListPopOut" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="stepListPopOutLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="stepListPopOutLabel">AVAILABLE STEPS</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body available-step-list">
+          {% for spec_detail in spec_details %}
+            <div class="card task mb-3 available-step">
+              <div class="card-header text-bg-light" value="{{ spec_detail.name }}">
+                <div class="row">
+                  <div class="col-sm-10">{{ spec_detail.name | upper}}</div>
+                  <button type="button" class="btn-close col-sm-2 remove-single-card" style="display: none;" aria-label="Close">
+                </div>
+              </div>
+              <div class="card-body">
+                <p class="card-text">{{ spec_detail.description }}</p>
+              </div>
+              <div class="card-footer bg-transparent">
+                <a href="{{ spec_detail.doc_link }}" target="_blank" class="card-link">Document</a>
+                <a href="#" target="_blank" class="card-link">Admin</a>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary add-new-step">Add</button>
+        </div>
+      </div>
+    </div>
+  </div>

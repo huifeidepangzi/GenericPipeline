@@ -1,4 +1,5 @@
 from datetime import datetime
+from http.client import HTTPResponse
 from typing import List
 from rest_framework import generics
 import yaml
@@ -60,6 +61,28 @@ class AddPipelineView(APIView):
         new_pipeline_yaml.specyamls.set(spec_yamls)
 
         return Response({'message': 'POST request received'}, status=status.HTTP_200_OK)
+
+
+class GetYAMLPreviewView(APIView):
+    def post(self, request):
+        logic_blocks = []
+        for logic_block_name, stage_names in request.data.get("logic_blocks").items():
+            logic_blocks.append({
+                "name": logic_block_name,
+                "stages": [{
+                    "desc": SpecYaml.objects.get(name=name).description,
+                    "spec": SpecYaml.objects.get(name=name).name,
+                } for name in stage_names],
+            })
+        
+        yaml_body_dict = {
+            "name": request.data.get("pipeline_name"), 
+            "logic_blocks": logic_blocks,
+        }
+
+        yaml_str = yaml.dump(yaml_body_dict, indent=4, sort_keys=False)
+            
+        return Response({"yaml_str": yaml_str}, status=status.HTTP_200_OK)
 
 
 class ExecutionRecordUpdateStatusView(generics.UpdateAPIView):
