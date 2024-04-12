@@ -6,23 +6,23 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('pipeline_configuration', '0017_secrettoken'),
+        ("pipeline_configuration", "0017_secrettoken"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='pipelineexecutionrecord',
-            name='logs',
+            model_name="pipelineexecutionrecord",
+            name="logs",
         ),
         migrations.AddField(
-            model_name='pipelineexecutionrecord',
-            name='job_id',
-            field=models.CharField(default='', max_length=100, unique=True),
+            model_name="pipelineexecutionrecord",
+            name="job_id",
+            field=models.CharField(default="", max_length=100, unique=True),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='pipelineexecutionrecord',
-            name='link',
-            field=models.URLField(blank=True, default='', null=True),
+            model_name="pipelineexecutionrecord",
+            name="link",
+            field=models.URLField(blank=True, default="", null=True),
         ),
     ]

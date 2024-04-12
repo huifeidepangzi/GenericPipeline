@@ -7,19 +7,46 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('pipeline_configuration', '0005_specyaml_description'),
+        ("pipeline_configuration", "0005_specyaml_description"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='PipelineExecutionRecord',
+            name="PipelineExecutionRecord",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('triggered_at', models.DateTimeField(auto_now=True)),
-                ('finished_at', models.DateTimeField(auto_now=True)),
-                ('status', models.CharField(choices=[('PENDING', 'PENDING'), ('COMPLETED', 'COMPLETED'), ('FAILED', 'FAILED'), ('ERROR', 'ERROR')], default='COMPLETED', max_length=255)),
-                ('logs', models.FileField(upload_to='')),
-                ('pipeline_yaml', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='pipeline_configuration.pipelineyaml')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("triggered_at", models.DateTimeField(auto_now=True)),
+                ("finished_at", models.DateTimeField(auto_now=True)),
+                (
+                    "status",
+                    models.CharField(
+                        choices=[
+                            ("PENDING", "PENDING"),
+                            ("COMPLETED", "COMPLETED"),
+                            ("FAILED", "FAILED"),
+                            ("ERROR", "ERROR"),
+                        ],
+                        default="COMPLETED",
+                        max_length=255,
+                    ),
+                ),
+                ("logs", models.FileField(upload_to="")),
+                (
+                    "pipeline_yaml",
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        to="pipeline_configuration.pipelineyaml",
+                    ),
+                ),
             ],
         ),
     ]

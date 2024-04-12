@@ -6,18 +6,28 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('pipeline_configuration', '0019_pipelineyamlhistory'),
+        ("pipeline_configuration", "0019_pipelineyamlhistory"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='pipelineexecutionrecord',
-            name='finished_at',
+            model_name="pipelineexecutionrecord",
+            name="finished_at",
             field=models.DateTimeField(blank=True, null=True),
         ),
         migrations.AlterField(
-            model_name='pipelineexecutionrecord',
-            name='status',
-            field=models.CharField(choices=[('PENDING', 'PENDING'), ('TRIGGERED', 'TRIGGERED'), ('COMPLETED', 'COMPLETED'), ('FAILED', 'FAILED'), ('ERROR', 'ERROR')], default='COMPLETED', max_length=255),
+            model_name="pipelineexecutionrecord",
+            name="status",
+            field=models.CharField(
+                choices=[
+                    ("PENDING", "PENDING"),
+                    ("TRIGGERED", "TRIGGERED"),
+                    ("COMPLETED", "COMPLETED"),
+                    ("FAILED", "FAILED"),
+                    ("ERROR", "ERROR"),
+                ],
+                default="COMPLETED",
+                max_length=255,
+            ),
         ),
     ]

@@ -22,7 +22,7 @@ from django.urls import include, path
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path('pipeline_configuration/', include("pipeline_configuration.urls")),
+    path("pipeline_configuration/", include("pipeline_configuration.urls")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 admin.site.site_url = "/pipeline_configuration/add_pipeline/"

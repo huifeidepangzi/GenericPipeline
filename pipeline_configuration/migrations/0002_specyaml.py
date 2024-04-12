@@ -6,17 +6,28 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('pipeline_configuration', '0001_initial'),
+        ("pipeline_configuration", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='SpecYaml',
+            name="SpecYaml",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=50, unique=True)),
-                ('body', models.TextField()),
-                ('pipeline_yaml', models.ManyToManyField(to='pipeline_configuration.pipelineyaml')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=50, unique=True)),
+                ("body", models.TextField()),
+                (
+                    "pipeline_yaml",
+                    models.ManyToManyField(to="pipeline_configuration.pipelineyaml"),
+                ),
             ],
         ),
     ]
