@@ -7,13 +7,17 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('pipeline_configuration', '0007_alter_pipelineexecutionrecord_logs'),
+        ("pipeline_configuration", "0007_alter_pipelineexecutionrecord_logs"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='pipelineexecutionrecord',
-            name='pipeline_run',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='pipeline_configuration.pipelinerun'),
+            model_name="pipelineexecutionrecord",
+            name="pipeline_run",
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                to="pipeline_configuration.pipelinerun",
+            ),
         ),
     ]

@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('pipeline_configuration', '0021_alter_pipelineexecutionrecord_finished_at'),
+        ("pipeline_configuration", "0021_alter_pipelineexecutionrecord_finished_at"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='pipelineyamlhistory',
-            name='name',
+            model_name="pipelineyamlhistory",
+            name="name",
             field=models.CharField(max_length=50),
         ),
     ]

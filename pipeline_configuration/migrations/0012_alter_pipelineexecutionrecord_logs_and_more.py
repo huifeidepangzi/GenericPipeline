@@ -6,18 +6,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('pipeline_configuration', '0011_specyaml_document_specyaml_document_link'),
+        ("pipeline_configuration", "0011_specyaml_document_specyaml_document_link"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='pipelineexecutionrecord',
-            name='logs',
-            field=models.FileField(default=None, null=True, upload_to=''),
+            model_name="pipelineexecutionrecord",
+            name="logs",
+            field=models.FileField(default=None, null=True, upload_to=""),
         ),
         migrations.AlterField(
-            model_name='specyaml',
-            name='document',
-            field=models.FileField(default=None, null=True, upload_to=''),
+            model_name="specyaml",
+            name="document",
+            field=models.FileField(default=None, null=True, upload_to=""),
         ),
     ]

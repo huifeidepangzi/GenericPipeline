@@ -9,31 +9,42 @@ class PipelineYamlForm(forms.ModelForm):
     def clean(self):
         validation_errors = []
         yaml_dict = yaml.load(self.cleaned_data["body"], Loader=SafeLoader)
-        
+
         if "name" not in yaml_dict:
             validation_errors.append(
-                forms.ValidationError("Logic block name field is missing.", code="MISSED_PIPELINE_NAME")
+                forms.ValidationError(
+                    "Logic block name field is missing.", code="MISSED_PIPELINE_NAME"
+                )
             )
 
         if "logic_blocks" not in yaml_dict:
             validation_errors.append(
-                forms.ValidationError("Logic blocks field is missing.", code="MISSED_LOGIC_BLOCKS")
+                forms.ValidationError(
+                    "Logic blocks field is missing.", code="MISSED_LOGIC_BLOCKS"
+                )
             )
 
         for logic_block_yaml in yaml_dict["logic_blocks"]:
             if "name" not in logic_block_yaml:
                 validation_errors.append(
-                    forms.ValidationError("Logic block name field is missing.", code="MISSED_LOGIC_BLOCK_NAME")
+                    forms.ValidationError(
+                        "Logic block name field is missing.",
+                        code="MISSED_LOGIC_BLOCK_NAME",
+                    )
                 )
 
             if "stages" not in logic_block_yaml:
                 validation_errors.append(
-                    forms.ValidationError("stages field is missing.", code="MISSED_STAGES")
+                    forms.ValidationError(
+                        "stages field is missing.", code="MISSED_STAGES"
+                    )
                 )
             else:
-                all_spec_model_names = self.instance.specyamls.all().values_list("name", flat=True)
+                all_spec_model_names = self.instance.specyamls.all().values_list(
+                    "name", flat=True
+                )
                 # all_spec_names_in_logic_block = [stage["spec"] for stage in logic_block_yaml["stages"]]
-                
+
                 # for spec_model_name in all_spec_names_in_logic_block:
                 #     if spec_model_name not in all_spec_model_names:
                 #         validation_errors.append(
@@ -84,8 +95,8 @@ class PipelineYamlForm(forms.ModelForm):
             "body": django_ace.AceWidget(mode="yaml", theme="twilight"),
         }
         fields = "__all__"
-        
-        
+
+
 class PipelineYamlHistoryForm(forms.ModelForm):
     class Meta:
         model = PipelineYamlHistory
@@ -106,11 +117,9 @@ class SpecYamlForm(forms.ModelForm):
 
 class VariableLifecycleScanForm(forms.Form):
     variable_name = forms.CharField(min_length=1)
-    
+
 
 class YAMLDisplayForm(forms.Form):
     yaml_text = forms.CharField(
-        widget=forms.Textarea(
-            attrs={"rows": 10, "cols": 84, "readonly": "readonly"}
-        )
+        widget=forms.Textarea(attrs={"rows": 10, "cols": 84, "readonly": "readonly"})
     )

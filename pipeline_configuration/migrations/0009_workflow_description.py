@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('pipeline_configuration', '0008_pipelineexecutionrecord_pipeline_run'),
+        ("pipeline_configuration", "0008_pipelineexecutionrecord_pipeline_run"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='workflow',
-            name='description',
+            model_name="workflow",
+            name="description",
             field=models.CharField(blank=True, max_length=200),
         ),
     ]

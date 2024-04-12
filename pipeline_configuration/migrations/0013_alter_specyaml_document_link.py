@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('pipeline_configuration', '0012_alter_pipelineexecutionrecord_logs_and_more'),
+        ("pipeline_configuration", "0012_alter_pipelineexecutionrecord_logs_and_more"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='specyaml',
-            name='document_link',
+            model_name="specyaml",
+            name="document_link",
             field=models.URLField(default=None, null=True),
         ),
     ]

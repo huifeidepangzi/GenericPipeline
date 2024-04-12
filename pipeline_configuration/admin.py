@@ -28,6 +28,7 @@ from django.utils.html import format_html
 
 from pipeline_configuration.utils.yaml_tools import yaml_to_json
 
+
 @admin.register(Workflow)
 class WorkflowAdmin(admin.ModelAdmin):
     list_display = ("name", "description")
@@ -63,10 +64,10 @@ class PipelineYamlAdmin(admin.ModelAdmin):
         "run_pipeline",
     ]
     change_form_template = "change_form.html"
-    
+
     def save_model(self, request, obj, form, change):
         super().save_model(request, obj, form, change)
-        
+
         if request.user.is_authenticated:
             PipelineYamlHistory.objects.create(
                 name=obj.name,
@@ -102,7 +103,7 @@ class PipelineYamlAdmin(admin.ModelAdmin):
         target_variable_name = request.GET["variable_name"]
         matched_specs = []
         pipeline_yaml_instance = PipelineYaml.objects.get(id=pk)
-        
+
         yaml_body = yaml.load(pipeline_yaml_instance.body, Loader=SafeLoader)
         for logic_block in yaml_body["logic_blocks"]:
             for stage in logic_block["stages"]:
@@ -116,7 +117,7 @@ class PipelineYamlAdmin(admin.ModelAdmin):
                                     matched_specs.append(
                                         f"{logic_block['name']}.{spec_yaml.name}.input.{target_variable_name}"
                                     )
-                                    
+
                 for form in spec_yaml_dict["output_variables"]:
                     for fields in form.values():
                         for field in fields:
@@ -163,7 +164,7 @@ class PipelineRunAdmin(admin.ModelAdmin):
     def run_pipeline(self, request, queryset):
         gitlab_token = SecretToken.objects.get(name="GITLAB_JOB_TRIGGER_TOKEN")
         # URL of the endpoint you want to send the POST request to
-        url = 'https://gitlab.com/api/v4/projects/55799180/trigger/pipeline'
+        url = "https://gitlab.com/api/v4/projects/55799180/trigger/pipeline"
 
         run_yaml = yaml_to_json(queryset.get().pipeline_yaml.body)
         run_yaml = run_yaml.replace(" ", "").replace('"', '\"')
@@ -172,7 +173,7 @@ class PipelineRunAdmin(admin.ModelAdmin):
         data = {
             "token": gitlab_token.token,
             "ref": "main",
-            "variables": {"JOB_TYPE": "JOB_1", "pipeline_yaml": run_yaml}
+            "variables": {"JOB_TYPE": "JOB_1", "pipeline_yaml": run_yaml},
         }
 
         # Send the POST request with JSON data
@@ -183,14 +184,14 @@ class PipelineRunAdmin(admin.ModelAdmin):
         #     print('POST request successful!')
         # else:
         #     print(f'Failed to send POST request. Status code: {response.status_code}')
-        
+
         for pipeline_run in queryset:
             PipelineExecutionRecord.objects.create(
                 status="TRIGGERED",
                 pipeline_yaml=pipeline_run.pipeline_yaml,
                 pipeline_run=pipeline_run,
                 job_id=response.json()["id"],
-                link=f"https://gitlab.com{response.json()['detailed_status']['details_path']}"
+                link=f"https://gitlab.com{response.json()['detailed_status']['details_path']}",
             )
             self.message_user(
                 request,
@@ -202,9 +203,17 @@ class PipelineRunAdmin(admin.ModelAdmin):
 @admin.register(PipelineExecutionRecord)
 class PipelineExecutionRecordAdmin(admin.ModelAdmin):
     list_display = ("triggered_at", "finished_at", "status", "job_id", "job_link")
-    fields = ("triggered_at", "finished_at", "status", "pipeline_run", "pipeline_yaml", "job_id", "job_link")
+    fields = (
+        "triggered_at",
+        "finished_at",
+        "status",
+        "pipeline_run",
+        "pipeline_yaml",
+        "job_id",
+        "job_link",
+    )
     readonly_fields = ("triggered_at", "finished_at", "job_id", "job_link")
-    
+
     def job_link(self, instance):
         return format_html(
             '<a href="{0}" target="_blank">{1}</a>',
@@ -216,8 +225,8 @@ class PipelineExecutionRecordAdmin(admin.ModelAdmin):
 @admin.register(SecretToken)
 class SecretTokenAdmin(admin.ModelAdmin):
     list_display = ("name",)
-    
-    
+
+
 @admin.register(PipelineYamlHistory)
 class PipelineYamlHistoryAdmin(admin.ModelAdmin):
     list_display = ("name", "description", "changed_at", "changed_by")

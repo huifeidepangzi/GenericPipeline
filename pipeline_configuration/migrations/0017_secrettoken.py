@@ -6,17 +6,25 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('pipeline_configuration', '0016_alter_specyaml_pipeline_yaml'),
+        ("pipeline_configuration", "0016_alter_specyaml_pipeline_yaml"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='SecretToken',
+            name="SecretToken",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=100, unique=True)),
-                ('token', models.CharField(max_length=200, unique=True)),
-                ('description', models.TextField(blank=True)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=100, unique=True)),
+                ("token", models.CharField(max_length=200, unique=True)),
+                ("description", models.TextField(blank=True)),
             ],
         ),
     ]

@@ -6,13 +6,15 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('pipeline_configuration', '0003_alter_specyaml_pipeline_yaml'),
+        ("pipeline_configuration", "0003_alter_specyaml_pipeline_yaml"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='specyaml',
-            name='pipeline_yaml',
-            field=models.ManyToManyField(related_name='specyamls', to='pipeline_configuration.pipelineyaml'),
+            model_name="specyaml",
+            name="pipeline_yaml",
+            field=models.ManyToManyField(
+                related_name="specyamls", to="pipeline_configuration.pipelineyaml"
+            ),
         ),
     ]

@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('pipeline_configuration', '0006_pipelineexecutionrecord'),
+        ("pipeline_configuration", "0006_pipelineexecutionrecord"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='pipelineexecutionrecord',
-            name='logs',
-            field=models.FileField(null=True, upload_to=''),
+            model_name="pipelineexecutionrecord",
+            name="logs",
+            field=models.FileField(null=True, upload_to=""),
         ),
     ]

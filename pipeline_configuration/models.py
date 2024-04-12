@@ -2,6 +2,7 @@ from enum import Enum
 from django.db import models
 from django.contrib.auth.models import User
 
+
 class Workflow(models.Model):
     name = models.CharField(max_length=50, unique=True)
     description = models.CharField(max_length=200, blank=True)
@@ -30,7 +31,9 @@ class PipelineYaml(models.Model):
 class SpecYaml(models.Model):
     name = models.CharField(max_length=50, unique=True, blank=False, null=False)
     description = models.CharField(max_length=200, blank=True)
-    pipeline_yaml = models.ManyToManyField(PipelineYaml, related_name="specyamls", default=None, blank=True)
+    pipeline_yaml = models.ManyToManyField(
+        PipelineYaml, related_name="specyamls", default=None, blank=True
+    )
     body = models.TextField(blank=False, null=False)
     document_link = models.URLField(null=True, blank=True, default="")
     document = models.FileField(null=True, blank=True, default=None)
@@ -86,8 +89,8 @@ class SecretToken(models.Model):
 
     def __str__(self):
         return self.token
-    
-    
+
+
 class PipelineYamlHistory(models.Model):
     name = models.CharField(max_length=50, blank=False, null=False)
     description = models.CharField(max_length=200, blank=True)

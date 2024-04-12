@@ -26,7 +26,13 @@ SECRET_KEY = "django-insecure-xxn41(8tnzkhkf*x129m6*=x!a_ri2s)167qxy=@5$jae-8xw5
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*', '127.0.0.1', 'ec2-3-27-29-108.ap-southeast-2.compute.amazonaws.com', '0.0.0.0', 'localhost']
+ALLOWED_HOSTS = [
+    "*",
+    "127.0.0.1",
+    "ec2-3-27-29-108.ap-southeast-2.compute.amazonaws.com",
+    "0.0.0.0",
+    "localhost",
+]
 
 
 # Application definition
@@ -56,13 +62,13 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = "generic_pipeline.urls"
-ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         "DIRS": [
-            os.path.join(ROOT, 'pipeline_configuration', 'templates'),
+            os.path.join(ROOT, "pipeline_configuration", "templates"),
         ],
         "APP_DIRS": True,
         "OPTIONS": {
@@ -136,8 +142,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_URL = "/static/"
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
@@ -148,8 +154,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.TokenAuthentication',
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.TokenAuthentication",
         # 'rest_framework.authentication.BasicAuthentication',
         # 'rest_framework.authentication.SessionAuthentication',
     ]
