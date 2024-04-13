@@ -21,6 +21,27 @@ const getClosestItem = (zone, mouseY) => {
 };
 
 
+const getClosestLane = (zone, mouseX) => {
+  const allOtherLanes = zone.querySelectorAll(".swim-lane-wrapper:not(.is-dragging)");
+
+  let closestLane = null;
+  let closestOffset = Number.NEGATIVE_INFINITY;
+
+  allOtherLanes.forEach((lane) => {
+    const { left } = lane.getBoundingClientRect();
+
+    const offset = mouseX - left;
+
+    if (offset < 0 && offset > closestOffset) {
+      closestOffset = offset;
+      closestLane = lane;
+    }
+  });
+
+  return closestLane;
+};
+
+
 // Get the form
 var addNewColumnButton = document.getElementById("add-column-button");
 
@@ -48,6 +69,8 @@ addNewColumnButton.addEventListener('click', function(event) {
 
   var newColumn = document.createElement("div");
   newColumn.classList.add("col-sm-3");
+  newColumn.classList.add("swim-lane-wrapper");
+  newColumn.setAttribute("draggable", "true");
   newColumn.innerHTML = `
     <div class="swim-lane" value="${columnName}">
       <div class="row">
@@ -82,6 +105,30 @@ addNewColumnButton.addEventListener('click', function(event) {
       } else {
         swimLane.insertBefore(itemToDrop, closestItem);
       }
+    });
+  });
+
+  var lanesZone = document.querySelectorAll(".lanes")[0];
+  lanesZone.addEventListener("dragover", (dragEvent) => {
+    dragEvent.preventDefault();
+
+    const closestLane = getClosestLane(lanesZone, dragEvent.clientX);
+    const itemToDrop = document.querySelector(".lane-is-dragging");
+
+    if (!closestLane) {
+      lanesZone.appendChild(itemToDrop);
+    } else {
+      lanesZone.insertBefore(itemToDrop, closestLane);
+    }
+  });
+
+  var swimLanesWrappers = document.querySelectorAll(".swim-lane-wrapper");
+  swimLanesWrappers.forEach((lane) => {
+    lane.addEventListener("dragstart", (event) => {
+      lane.classList.add("lane-is-dragging");
+    });
+    lane.addEventListener("dragend", () => {
+      lane.classList.remove("lane-is-dragging");
     });
   });
 
@@ -120,13 +167,8 @@ addNewStepButton.addEventListener('click', function() {
   clonedCard.setAttribute('draggable', 'true');
 
   // Get the swim-lane
-  // var swimLane = document.querySelector('.swim-lane');
   var targetAddStepButton = document.getElementById(clickedAddStepButtonId);
   var parentElement = targetAddStepButton.parentElement;
-  // Append the cloned card to the swim-lane
-  // swimLane.appendChild(clonedCard);
-  // targetAddStepButton.prepend(clonedCard);
-  // parentElement.insertBefore(clonedCard, targetAddStepButton);
   parentElement.appendChild(clonedCard);
 
   document.querySelectorAll(".remove-single-card").forEach((button) => {
@@ -137,8 +179,12 @@ addNewStepButton.addEventListener('click', function() {
 
   var swimLaneItems = document.querySelectorAll(".swim-lane-item");
   swimLaneItems.forEach((swimLaneItem) => {
-    swimLaneItem.addEventListener("dragstart", () => {
+    swimLaneItem.addEventListener("dragstart", (event) => {
       swimLaneItem.classList.add("is-dragging");
+
+      // To prevent the drag and drop event from bubbling up to the parent element
+      // when having nested drag and drop elements
+      event.stopPropagation();
     });
     swimLaneItem.addEventListener("dragend", () => {
       swimLaneItem.classList.remove("is-dragging");

@@ -127,6 +127,13 @@
   color: white;
 }
 
+.lane-is-dragging .swim-lane {
+  scale: 1.05;
+  /* box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.25); */
+  background: rgb(50, 50, 50);
+  color: rgb(255, 255, 255);
+}
+
 #add-new-column-button {
   display: flex;
   flex-direction: column;
@@ -237,12 +244,12 @@ textarea:hover {
 }
 
 #save-pipeline-button {
-  width: 120px;
+  width: 150px;
   font-size: 16px;
 }
 
 #yaml-preview-button {
-  width: 120px;
+  width: 150px;
   font-size: 16px;
 }
 

@@ -38,7 +38,6 @@ yamlPreviewButton.addEventListener('click', function (e) {
   }).then(response => {
     var yamlPreviewSection = document.getElementById("yaml-preview");
     response.json().then(data => {
-      console.log(data.yaml_str);
       yamlPreviewSection.innerHTML = data.yaml_str;
     });
   })
