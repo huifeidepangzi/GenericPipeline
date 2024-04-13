@@ -120,13 +120,8 @@ addNewStepButton.addEventListener('click', function() {
   clonedCard.setAttribute('draggable', 'true');
 
   // Get the swim-lane
-  // var swimLane = document.querySelector('.swim-lane');
   var targetAddStepButton = document.getElementById(clickedAddStepButtonId);
   var parentElement = targetAddStepButton.parentElement;
-  // Append the cloned card to the swim-lane
-  // swimLane.appendChild(clonedCard);
-  // targetAddStepButton.prepend(clonedCard);
-  // parentElement.insertBefore(clonedCard, targetAddStepButton);
   parentElement.appendChild(clonedCard);
 
   document.querySelectorAll(".remove-single-card").forEach((button) => {
