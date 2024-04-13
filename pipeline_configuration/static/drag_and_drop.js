@@ -1,23 +1,23 @@
 var clickedAddStepButtonId = null;
 
-const insertAboveTask = (zone, mouseY) => {
-  const els = zone.querySelectorAll(".task:not(.is-dragging)");
+const getClosestItem = (zone, mouseY) => {
+  const allOtherItems = zone.querySelectorAll(".swim-lane-item:not(.is-dragging)");
 
-  let closestTask = null;
+  let closestItem = null;
   let closestOffset = Number.NEGATIVE_INFINITY;
 
-  els.forEach((task) => {
-    const { top } = task.getBoundingClientRect();
+  allOtherItems.forEach((item) => {
+    const { top, height } = item.getBoundingClientRect();
 
-    const offset = mouseY - top;
+    const offset = mouseY - (top + height/2);
 
     if (offset < 0 && offset > closestOffset) {
       closestOffset = offset;
-      closestTask = task;
+      closestItem = item;
     }
   });
 
-  return closestTask;
+  return closestItem;
 };
 
 
@@ -26,10 +26,6 @@ var addNewColumnButton = document.getElementById("add-column-button");
 
 // Add an event listener for the 'submit' event
 addNewColumnButton.addEventListener('click', function(event) {
-  // Your code here
-
-  
-  // console.log("Form submitted");
   var columnName = document.getElementById('column-name').value;
 
   if (columnName === '') {
@@ -73,27 +69,18 @@ addNewColumnButton.addEventListener('click', function(event) {
     });
   });
 
-  var droppables = document.querySelectorAll(".swim-lane");
-  droppables.forEach((zone) => {
-    zone.addEventListener("dragover", (e) => {
-      e.preventDefault();
-  
-      const bottomTask = insertAboveTask(zone, e.clientY);
-      const curTask = document.querySelector(".is-dragging");
+  var swimLanes = document.querySelectorAll(".swim-lane");
+  swimLanes.forEach((swimLane) => {
+    swimLane.addEventListener("dragover", (dragEvent) => {
+      dragEvent.preventDefault();
 
-      // Get the "Add Step" button
-      // const addStepButtons = document.querySelectorAll('.add-step-button');
-
-      // Check if the bottomTask is the last child of its parent
-      // if (bottomTask === bottomTask.parentNode.lastElementChild) {
-      //   // Prevent the card from being dropped
-      //   return;
-      // }
+      const closestItem = getClosestItem(swimLane, dragEvent.clientY);
+      const itemToDrop = document.querySelector(".is-dragging");
   
-      if (!bottomTask) {
-        zone.appendChild(curTask);
+      if (!closestItem) {
+        swimLane.appendChild(itemToDrop);
       } else {
-        zone.insertBefore(curTask, bottomTask);
+        swimLane.insertBefore(itemToDrop, closestItem);
       }
     });
   });
@@ -148,13 +135,13 @@ addNewStepButton.addEventListener('click', function() {
     });
   });
 
-  var draggables = document.querySelectorAll(".task");
-  draggables.forEach((task) => {
-    task.addEventListener("dragstart", () => {
-      task.classList.add("is-dragging");
+  var swimLaneItems = document.querySelectorAll(".swim-lane-item");
+  swimLaneItems.forEach((swimLaneItem) => {
+    swimLaneItem.addEventListener("dragstart", () => {
+      swimLaneItem.classList.add("is-dragging");
     });
-    task.addEventListener("dragend", () => {
-      task.classList.remove("is-dragging");
+    swimLaneItem.addEventListener("dragend", () => {
+      swimLaneItem.classList.remove("is-dragging");
     });
   });
 

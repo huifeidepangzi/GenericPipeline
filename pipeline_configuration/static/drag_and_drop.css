@@ -199,20 +199,36 @@ textarea:hover {
   overflow-y: auto;
 }
 
-.available-step.selected {
-  background-color: #57c0fd; /* Change the background color to red */
+.available-step-list .available-step:hover {
+  background-color: #c0e8ff;
+}
+
+.available-step-list .available-step:hover .card-header {
+  color: #c0e8ff !important;
+}
+
+.available-step-list .available-step:hover .card-body .card-text {
+  color: #ffffff !important;
+}
+
+.available-step-list .available-step:hover .card-footer {
+  color: #ffffff !important;
+}
+
+.available-step-list .available-step.selected {
+  background-color: #57c0fd;
 }
 
 .available-step.selected .card-header {
-  color: #57c0fd !important; /* Change the text color to red */
+  color: #57c0fd !important;
 }
 
 .available-step.selected .card-body .card-text {
-  color: #ffffff !important; /* Change the text color to red */
+  color: #ffffff !important;
 }
 
 .available-step.selected .card-footer {
-  color: #ffffff !important; /* Change the text color to red */
+  color: #ffffff !important;
 }
 
 #add-pipeline-container {
