@@ -92,7 +92,14 @@ class AddPipelineView(APIView):
         )
         new_pipeline_yaml.specyamls.set(spec_yamls)
 
-        return JsonResponse({"message": "POST request received"}, status=status.HTTP_200_OK)
+        return JsonResponse(
+            {
+                "message": "POST request received", 
+                "app_name": "pipeline_configuration", 
+                "admin_pk": new_pipeline_yaml.pk
+            }, 
+            status=status.HTTP_200_OK,
+        )
 
 
 class GetYAMLPreviewView(APIView):
