@@ -69,13 +69,13 @@ class PipelineYamlForm(forms.ModelForm):
                                 code="MISSED_SPEC",
                             )
                         )
-                    elif stage["spec"] not in all_spec_model_names:
-                        validation_errors.append(
-                            forms.ValidationError(
-                                f"Spec {stage['spec']} is not linked to this pipeline yaml.",
-                                code="SPEC_MODEL_UNLINKED",
-                            )
-                        )
+                    # elif stage["spec"] not in all_spec_model_names:
+                    #     validation_errors.append(
+                    #         forms.ValidationError(
+                    #             f"Spec {stage['spec']} is not linked to this pipeline yaml.",
+                    #             code="SPEC_MODEL_UNLINKED",
+                    #         )
+                    #     )
                     # if "tags" not in stage:
                     #     validation_errors.append(
                     #         forms.ValidationError(
