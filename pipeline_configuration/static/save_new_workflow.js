@@ -37,17 +37,21 @@ newYamlCreationForm.addEventListener('submit', function (e) {
   }).then(response => {
     var saveResultMessageLocation = document.getElementById("save-result-message");
     if (response.ok) {
+      response.json().then(data => {
         saveResultMessageLocation.innerHTML = `
         <div class="alert alert-success alert-dismissible fade show" role="alert">
-          <strong>Pipeline yaml created successfully!</strong>
+          <strong>
+            Pipeline yaml created successfully. 
+            Click <a href="/admin/${data.app_name}/pipelineyaml/${data.admin_pk}/change/" target="_blank">[<em>HERE</em>]</a> to view details.
+          </strong>
           <button type="button" class="btn-close close" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         `;
+      });
     } else {
       response.json().then(data => {
-        console.log('Response:', data);
         saveResultMessageLocation.innerHTML = `
           <div class="alert alert-danger alert-dismissible fade show" role="alert">
             <strong>Fail to create pipeline yaml...Reason: ${data.message}</strong>
