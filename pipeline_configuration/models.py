@@ -79,7 +79,7 @@ class PipelineExecutionRecord(models.Model):
     link = models.URLField(null=True, blank=True, default="")
 
     def __str__(self):
-        return str(self.pipeline_yaml.name + " triggered at " + str(self.triggered_at))
+        return str(self.pipeline_yaml) + " triggered at " + str(self.triggered_at)
 
 
 class SecretToken(models.Model):
