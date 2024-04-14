@@ -1,6 +1,4 @@
 from datetime import datetime
-from http.client import HTTPResponse
-from typing import List
 from django.http import JsonResponse
 from rest_framework import generics
 import yaml
@@ -140,3 +138,42 @@ class ExecutionRecordUpdateStatusView(generics.UpdateAPIView):
         instance.save()
 
         return Response(serializer.data)
+
+
+class EditPipelineTemplateView(APIView):
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = "edit_pipeline.html"
+
+    def get(self, request):
+        all_pipeline_names = PipelineYaml.objects.all().values_list("name", flat=True)
+        return Response({"all_pipeline_names": all_pipeline_names})
+
+
+class EditPipelineView(APIView):
+    def get(self, request, pipeline_name):
+        pipeline_yaml = PipelineYaml.objects.get(name=pipeline_name)
+        # pipeline_body = yaml.load(pipeline_yaml.body, Loader=yaml.FullLoader)
+        pipeline_body = yaml.load(pipeline_yaml.body, Loader=yaml.FullLoader)
+        
+        spec_details = []
+
+        for spec_yaml in SpecYaml.objects.all().order_by("name"):
+            spec_details.append(
+                {
+                    "name": spec_yaml.name,
+                    "description": spec_yaml.description,
+                    "doc_link": spec_yaml.document_link,
+                }
+            )
+        
+        payload = {
+            "pipeline_name": pipeline_name, 
+            "pipeline_description": pipeline_yaml.description, 
+            "pipeline_body": pipeline_body,
+            "spec_details": spec_details, 
+        }
+        
+        print("111111111111111111")
+        print(payload)
+
+        return JsonResponse(payload, status=status.HTTP_200_OK)

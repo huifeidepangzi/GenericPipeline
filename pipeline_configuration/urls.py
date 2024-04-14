@@ -9,4 +9,6 @@ urlpatterns = [
         "update_job_status/<str:job_id>/",
         views.ExecutionRecordUpdateStatusView.as_view(),
     ),
+    path("edit_pipelines/", views.EditPipelineTemplateView.as_view()),
+    path("edit_single_pipeline/<str:pipeline_name>/", views.EditPipelineView.as_view()),
 ]

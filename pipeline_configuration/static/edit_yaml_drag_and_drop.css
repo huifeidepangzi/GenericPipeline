@@ -1,0 +1,256 @@
+/* ---- RESET/BASIC STYLING ---- */
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+
+  -ms-overflow-style: none; /* IE and Edge */
+  /* scrollbar-width: none; Firefox */
+}
+
+/* *::-webkit-scrollbar {
+  display: none;
+} */
+  
+.board {
+  width: 100%;
+  height: 100vh;
+  overflow: scroll;
+
+  /* background-image: url(https://images.unsplash.com/photo-1519681393784-d120267933ba?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80); */
+  background-position: center;
+  background-size: cover;
+}
+
+/* ---- FORM ---- */
+#todo-form {
+  padding: 32px 32px 0;
+}
+
+#todo-form input {
+  padding: 12px;
+  margin-right: 12px;
+  width: 225px;
+
+  border-radius: 4px;
+  border: none;
+
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.25);
+  background: white;
+
+  font-size: 14px;
+  outline: none;
+}
+
+#todo-form button {
+  padding: 12px 32px;
+
+  border-radius: 4px;
+  border: none;
+
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.25);
+  background: #ffffff;
+  color: black;
+
+  font-weight: bold;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+/* ---- BOARD ---- */
+.lanes {
+  display: flex;
+  align-items: flex-start;
+  justify-content: start;
+  gap: 16px;
+
+  /* padding: 24px 32px; */
+
+  overflow-x: auto;
+  overflow-y: hidden;
+  height: 100%;
+}
+
+.heading {
+  font-size: 22px;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.swim-lane {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  background: #f4f4f4;
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.25);
+
+  padding: 12px;
+  border-radius: 4px;
+  width: 300px;
+  /* min-height: 120px;
+  max-height: 400px; */
+
+  height: 700px;
+  /* height: 550px; */
+  overflow: auto;
+
+  flex-shrink: 0;
+  
+  border: 1px solid #000; /* Optional, just to show the div boundaries */
+  border-color: rgb(226,226,226); /* Set the border color to grey */
+  transition: color 0.8s ease, border-color 0.8s ease; /* Add a transition on the color property */
+}
+
+.swim-lane:hover {
+  color: rgb(26, 68, 146); /* Change the text color to black when hovering */
+  border-color: rgb(26, 68, 146); /* Change the border color to black when hovering */
+}
+
+/* .task {
+  background: white;
+  color: black;
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.15);
+
+  padding: 12px;
+  border-radius: 4px;
+
+  font-size: 16px;
+  cursor: move;
+} */
+
+.is-dragging {
+  scale: 1.05;
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.25);
+  background: rgb(50, 50, 50);
+  color: white;
+}
+
+.lane-is-dragging .swim-lane {
+  scale: 1.05;
+  /* box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.25); */
+  background: rgb(50, 50, 50);
+  color: rgb(255, 255, 255);
+}
+
+#add-new-column-button {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  background: #f4f4f4;
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.25);
+
+  padding: 12px;
+  width: 300px;
+  /* min-height: 120px;
+  max-height: 400px; */
+  
+  /* height: 550px; */
+  overflow: auto;
+  
+  flex-shrink: 0;
+  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #000; /* Optional, just to show the div boundaries */
+  background-color: rgb(226, 226, 226); /* Set the background color to grey */
+  border-color: rgb(226,226,226); /* Set the border color to grey */
+  border-radius: 4px;
+  font-weight: 600;
+  color: rgb(133, 133, 133); /* Set the text color to dark grey */
+  cursor: pointer; /* Change the cursor to a pointer */
+  height: 700px;
+  transition: color 0.8s ease, border-color 0.8s ease; /* Add a transition on the color property */
+}
+
+#add-new-column-button:hover {
+  color: rgb(26, 68, 146); /* Change the text color to black when hovering */
+  border-color: rgb(26, 68, 146); /* Change the border color to black when hovering */
+}
+
+input {
+  transition: color 0.8s ease, border-color 0.8s ease; /* Add a transition on the color property */
+}
+
+input:hover {
+  color: rgb(26, 68, 146); /* Change the text color to black when hovering */
+  border-color: rgb(26, 68, 146); /* Change the border color to black when hovering */
+}
+
+textarea {
+  transition: color 0.8s ease, border-color 0.8s ease; /* Add a transition on the color property */
+}
+
+textarea:hover {
+  color: rgb(26, 68, 146); /* Change the text color to black when hovering */
+  border-color: rgb(26, 68, 146); /* Change the border color to black when hovering */
+}
+
+.btn-close {
+  position: relative;
+  top: 0;
+  right: 0;
+}
+
+.single-column-name {
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.available-step-list {
+  height: 500px;
+  overflow-y: auto;
+}
+
+.available-step-list .available-step:hover {
+  background-color: #c0e8ff;
+}
+
+.available-step-list .available-step:hover .card-header {
+  color: #c0e8ff !important;
+}
+
+.available-step-list .available-step:hover .card-body .card-text {
+  color: #ffffff !important;
+}
+
+.available-step-list .available-step:hover .card-footer {
+  color: #ffffff !important;
+}
+
+.available-step-list .available-step.selected {
+  background-color: #57c0fd;
+}
+
+.available-step.selected .card-header {
+  color: #57c0fd !important;
+}
+
+.available-step.selected .card-body .card-text {
+  color: #ffffff !important;
+}
+
+.available-step.selected .card-footer {
+  color: #ffffff !important;
+}
+
+#edit-pipeline-container {
+  margin-right: auto;
+  margin-left: 0;
+  display: none;
+}
+
+#save-pipeline-button {
+  width: 150px;
+  font-size: 16px;
+}
+
+#yaml-preview-button {
+  width: 150px;
+  font-size: 16px;
+}
+
