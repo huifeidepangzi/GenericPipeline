@@ -3,7 +3,7 @@ const newYamlCreationForm = document.querySelector("#new-yaml-creation-form");
 
 newYamlCreationForm.addEventListener('submit', function (e) {
   e.preventDefault()
-  // const newYamlCreationURL = 'pipeline_configuration/add_pipeline/';
+  const newYamlCreationURL = '/pipeline_configuration/add_pipeline/';
   var pipeline_name = document.getElementById("new-pipeline-name").value;
   var pipeline_description = document.getElementById("new-pipeline-description").value;
 
@@ -28,7 +28,7 @@ newYamlCreationForm.addEventListener('submit', function (e) {
     "pipeline_description": pipeline_description,
   };
 
-  fetch('', {
+  fetch(newYamlCreationURL, {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json'
@@ -46,16 +46,18 @@ newYamlCreationForm.addEventListener('submit', function (e) {
         </div>
         `;
     } else {
-      saveResultMessageLocation.innerHTML = `
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-          <strong>Fail to create pipeline yaml!</strong>
-          <button type="button" class="btn-close close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
+      response.json().then(data => {
+        console.log('Response:', data);
+        saveResultMessageLocation.innerHTML = `
+          <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>Fail to create pipeline yaml...Reason: ${data.message}</strong>
+            <button type="button" class="btn-close close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
         `;
+      });
     }
-    
   })
 //   .then(data => {
 //     console.log('Response:', data);

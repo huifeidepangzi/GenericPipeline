@@ -1,6 +1,7 @@
 from datetime import datetime
 from http.client import HTTPResponse
 from typing import List
+from django.http import JsonResponse
 from rest_framework import generics
 import yaml
 from pipeline_configuration.models import (
@@ -39,6 +40,13 @@ class AddPipelineView(APIView):
         return Response({"spec_details": spec_details})
 
     def post(self, request):
+        pipeline_name = request.data.get("pipeline_name")
+        if PipelineYaml.objects.filter(name=pipeline_name).exists():
+            return JsonResponse(
+                {"message": f"Pipeline with name [{pipeline_name}] already exists"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        
         logic_blocks = []
         for logic_block_name, stage_names in request.data.get("logic_blocks").items():
             logic_blocks.append(
@@ -53,14 +61,28 @@ class AddPipelineView(APIView):
                     ],
                 }
             )
+            
+        stage_names = [stage["spec"] for lb in logic_blocks for stage in lb["stages"]]
+        if len(stage_names) != len(set(stage_names)):
+            return JsonResponse(
+                {"message": "Duplicate stages in logic blocks"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+            
+        for logic_block in logic_blocks:
+            if len(logic_block["stages"]) == 0:
+                return JsonResponse(
+                    {"message": f"Logic block [{logic_block['name']}] should have at least 1 stages"},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
 
         yaml_body_dict = {
-            "name": request.data.get("pipeline_name"),
+            "name": pipeline_name,
             "logic_blocks": logic_blocks,
         }
 
         new_pipeline_yaml = PipelineYaml.objects.create(
-            name=request.data.get("pipeline_name"),
+            name=pipeline_name,
             description=request.data.get("pipeline_description"),
             body=yaml.dump(yaml_body_dict, indent=4, sort_keys=False),
         )
@@ -70,7 +92,7 @@ class AddPipelineView(APIView):
         )
         new_pipeline_yaml.specyamls.set(spec_yamls)
 
-        return Response({"message": "POST request received"}, status=status.HTTP_200_OK)
+        return JsonResponse({"message": "POST request received"}, status=status.HTTP_200_OK)
 
 
 class GetYAMLPreviewView(APIView):
