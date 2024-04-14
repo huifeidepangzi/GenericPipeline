@@ -47,6 +47,12 @@ class AddPipelineView(APIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
         
+        if not request.data.get("logic_blocks"):
+            return JsonResponse(
+                {"message": "No logic blocks provided.."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        
         logic_blocks = []
         for logic_block_name, stage_names in request.data.get("logic_blocks").items():
             logic_blocks.append(

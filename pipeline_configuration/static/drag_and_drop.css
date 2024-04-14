@@ -104,8 +104,8 @@
 }
 
 .swim-lane:hover {
-  color: rgb(26, 68, 146); /* Change the text color to black when hovering */
-  border-color: rgb(26, 68, 146); /* Change the border color to black when hovering */
+  color: #7386D5; /* Change the text color to black when hovering */
+  border-color: #7386D5; /* Change the border color to black when hovering */
 }
 
 /* .task {
@@ -167,8 +167,8 @@
 }
 
 #add-new-column-button:hover {
-  color: rgb(26, 68, 146); /* Change the text color to black when hovering */
-  border-color: rgb(26, 68, 146); /* Change the border color to black when hovering */
+  color: #7386D5; /* Change the text color to black when hovering */
+  border-color: #7386D5; /* Change the border color to black when hovering */
 }
 
 input {
@@ -176,8 +176,8 @@ input {
 }
 
 input:hover {
-  color: rgb(26, 68, 146); /* Change the text color to black when hovering */
-  border-color: rgb(26, 68, 146); /* Change the border color to black when hovering */
+  color: #7386D5; /* Change the text color to black when hovering */
+  border-color: #7386D5; /* Change the border color to black when hovering */
 }
 
 textarea {
@@ -185,8 +185,8 @@ textarea {
 }
 
 textarea:hover {
-  color: rgb(26, 68, 146); /* Change the text color to black when hovering */
-  border-color: rgb(26, 68, 146); /* Change the border color to black when hovering */
+  color: #7386D5; /* Change the text color to black when hovering */
+  border-color: #7386D5; /* Change the border color to black when hovering */
 }
 
 .btn-close {
@@ -207,11 +207,11 @@ textarea:hover {
 }
 
 .available-step-list .available-step:hover {
-  background-color: #c0e8ff;
+  background-color: #b7beda;
 }
 
 .available-step-list .available-step:hover .card-header {
-  color: #c0e8ff !important;
+  color: #b7beda !important;
 }
 
 .available-step-list .available-step:hover .card-body .card-text {
@@ -223,11 +223,11 @@ textarea:hover {
 }
 
 .available-step-list .available-step.selected {
-  background-color: #57c0fd;
+  background-color: #7386D5;
 }
 
 .available-step.selected .card-header {
-  color: #57c0fd !important;
+  color: #7386D5 !important;
 }
 
 .available-step.selected .card-body .card-text {
@@ -246,10 +246,27 @@ textarea:hover {
 #save-pipeline-button {
   width: 150px;
   font-size: 16px;
+  background: #7386D5;
+  border-color: #7386D5;
 }
 
 #yaml-preview-button {
   width: 150px;
   font-size: 16px;
+  background: #858585;
+  border-color: #858585;
 }
 
+#add-column-button {
+  width: 150px;
+  font-size: 16px;
+  background: #7386D5;
+  border-color: #7386D5;
+}
+
+#add-new-step-button {
+  width: 150px;
+  font-size: 16px;
+  background: #7386D5;
+  border-color: #7386D5;
+}
