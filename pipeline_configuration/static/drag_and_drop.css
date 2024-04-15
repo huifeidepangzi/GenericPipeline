@@ -270,3 +270,8 @@ textarea:hover {
   background: #7386D5;
   border-color: #7386D5;
 }
+
+.add-step-button {
+  background: #df5e6b !important;
+  border-color: #df5e6b !important;
+}
