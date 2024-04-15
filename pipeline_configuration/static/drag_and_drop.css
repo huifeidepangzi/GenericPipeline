@@ -250,6 +250,11 @@ textarea:hover {
   border-color: #7386D5;
 }
 
+#save-pipeline-button:hover {
+  background: #5e6bdf;
+  border-color: #5e6bdf;
+}
+
 #yaml-preview-button {
   width: 150px;
   font-size: 16px;
@@ -264,6 +269,11 @@ textarea:hover {
   border-color: #7386D5;
 }
 
+#add-column-button:hover {
+  background: #5e6bdf;
+  border-color: #5e6bdf;
+}
+
 #add-new-step-button {
   width: 150px;
   font-size: 16px;
@@ -271,7 +281,17 @@ textarea:hover {
   border-color: #7386D5;
 }
 
+#add-new-step-button:hover {
+  background: #5e6bdf;
+  border-color: #5e6bdf;
+}
+
 .add-step-button {
   background: #df5e6b !important;
   border-color: #df5e6b !important;
+}
+
+.add-step-button:hover {
+  background: #db3e4e !important;
+  border-color: #db3e4e !important;
 }
