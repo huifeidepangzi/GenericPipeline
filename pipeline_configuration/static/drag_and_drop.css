@@ -65,11 +65,9 @@
   justify-content: start;
   gap: 16px;
 
-  /* padding: 24px 32px; */
-
   overflow-x: auto;
   overflow-y: hidden;
-  height: 100%;
+  height: 725px;
 }
 
 .heading {
@@ -89,48 +87,45 @@
   padding: 12px;
   border-radius: 4px;
   width: 300px;
-  /* min-height: 120px;
-  max-height: 400px; */
 
   height: 700px;
-  /* height: 550px; */
   overflow: auto;
 
   flex-shrink: 0;
   
   border: 1px solid #000; /* Optional, just to show the div boundaries */
   border-color: rgb(226,226,226); /* Set the border color to grey */
-  transition: color 0.8s ease, border-color 0.8s ease; /* Add a transition on the color property */
+  transition: color 0.8s ease, border-color 0.8s ease, box-shadow 0.8s ease; /* Add a transition on the color property */
 }
 
 .swim-lane:hover {
   color: #7386D5; /* Change the text color to black when hovering */
-  border-color: #7386D5; /* Change the border color to black when hovering */
+  border-color: #7386D5;
+  box-shadow: 0px 5px 15px #7386D5;
 }
-
-/* .task {
-  background: white;
-  color: black;
-  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.15);
-
-  padding: 12px;
-  border-radius: 4px;
-
-  font-size: 16px;
-  cursor: move;
-} */
 
 .is-dragging {
   scale: 1.05;
   box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.25);
-  background: rgb(50, 50, 50);
+  background: #7386D5;
   color: white;
+}
+
+.is-dragging .card-header {
+  color: #7386D5 !important;
+}
+
+.is-dragging .card-body .card-text {
+  color: #ffffff !important;
+}
+
+.is-dragging .card-footer {
+  color: #ffffff !important;
 }
 
 .lane-is-dragging .swim-lane {
   scale: 1.05;
-  /* box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.25); */
-  background: rgb(50, 50, 50);
+  background: #7386D5;
   color: rgb(255, 255, 255);
 }
 
@@ -144,10 +139,6 @@
 
   padding: 12px;
   width: 300px;
-  /* min-height: 120px;
-  max-height: 400px; */
-  
-  /* height: 550px; */
   overflow: auto;
   
   flex-shrink: 0;
@@ -236,6 +227,10 @@ textarea:hover {
 
 .available-step.selected .card-footer {
   color: #ffffff !important;
+}
+
+.available-step:hover {
+  cursor: pointer;
 }
 
 #add-pipeline-container {
