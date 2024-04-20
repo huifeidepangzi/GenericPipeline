@@ -93,9 +93,14 @@ $("#add-column-button").on('click', function(event) {
   swimLanes.forEach((swimLane) => {
     swimLane.addEventListener("dragover", (dragEvent) => {
       dragEvent.preventDefault();
+      dragEvent.stopPropagation();
 
       const closestItem = getClosestItem(swimLane, dragEvent.clientY);
       const itemToDrop = document.querySelector(".is-dragging");
+
+      if (itemToDrop === null || itemToDrop === undefined) {
+        return;
+      }
   
       if (!closestItem) {
         swimLane.appendChild(itemToDrop);
@@ -108,9 +113,14 @@ $("#add-column-button").on('click', function(event) {
   var lanesZone = document.querySelectorAll(".lanes")[0];
   lanesZone.addEventListener("dragover", (dragEvent) => {
     dragEvent.preventDefault();
+    dragEvent.stopPropagation();
 
     const closestLane = getClosestLane(lanesZone, dragEvent.clientX);
     const itemToDrop = document.querySelector(".lane-is-dragging");
+
+    if (itemToDrop === null || itemToDrop === undefined) {
+      return;
+    }
 
     if (!closestLane) {
       lanesZone.appendChild(itemToDrop);
@@ -120,8 +130,9 @@ $("#add-column-button").on('click', function(event) {
   });
 
   $(".swim-lane-wrapper").each(function() {
-    $(this).on("dragstart", function() {
+    $(this).on("dragstart", function(event) {
         $(this).addClass("lane-is-dragging");
+        event.stopPropagation();
     }).on("dragend", function() {
         $(this).removeClass("lane-is-dragging");
     });
