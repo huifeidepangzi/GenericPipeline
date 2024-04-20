@@ -45,7 +45,7 @@
 
 {% block footer %}
   {{ block.super }}
-  <script src="{% static 'drag_and_drop.js' %}"></script>
+  <script type="module" src="{% static 'drag_and_drop.js' %}"></script>
   <script src="{% static 'save_new_workflow.js' %}"></script>
   <script src="{% static 'fetch_yaml_preview.js' %}"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
