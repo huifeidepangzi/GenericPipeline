@@ -60,6 +60,7 @@ $("#add-column-button").on('click', function(event) {
     });
   } catch (error) {
     alert('The name of the swim lane already exists. Please try a different name.');
+    $("#column-name").val("");
     return;
   }
 
@@ -138,7 +139,8 @@ $("#add-column-button").on('click', function(event) {
     });
   });
 
-  columnName.value = '';
+  // Clear the input field
+  $("#column-name").val("");
 });
 
 
