@@ -10,7 +10,7 @@ from pipeline_configuration.models import (
     SpecYaml,
 )
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.authentication import TokenAuthentication
+from rest_framework.authentication import BasicAuthentication, SessionAuthentication, TokenAuthentication
 from rest_framework.response import Response
 
 from pipeline_configuration.serializers import PipelineExecutionRecordSerializer
@@ -18,9 +18,14 @@ from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from django.contrib.auth.mixins import LoginRequiredMixin
 
-
-class AddPipelineView(APIView):
+class AddPipelineView(LoginRequiredMixin, APIView):
+    authentication_classes = [
+        BasicAuthentication, 
+        SessionAuthentication, 
+        TokenAuthentication,
+    ]
     renderer_classes = [TemplateHTMLRenderer]
     template_name = "add_pipeline.html"
 
