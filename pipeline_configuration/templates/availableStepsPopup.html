@@ -7,21 +7,7 @@
         </div>
         <div class="modal-body available-step-list">
           {% for spec_detail in spec_details %}
-            <div class="card swim-lane-item mb-3 available-step">
-              <div class="card-header text-bg-light" value="{{ spec_detail.name }}">
-                <div class="row">
-                  <div class="col-sm-10">{{ spec_detail.name | upper}}</div>
-                  <button type="button" class="btn-close col-sm-2 remove-single-card" style="display: none;" aria-label="Close">
-                </div>
-              </div>
-              <div class="card-body">
-                <p class="card-text">{{ spec_detail.description }}</p>
-              </div>
-              <div class="card-footer bg-transparent">
-                <a href="{{ spec_detail.doc_link }}" target="_blank" class="card-link">Document</a>
-                <a href="#" target="_blank" class="card-link">Admin</a>
-              </div>
-            </div>
+            {% include "single_card.html" with spec_detail=spec_detail %}
           {% endfor %}
         </div>
         <div class="modal-footer">
