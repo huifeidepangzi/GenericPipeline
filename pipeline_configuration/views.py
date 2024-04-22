@@ -25,7 +25,6 @@ class AddPipelineView(APIView):
     template_name = "add_pipeline.html"
 
     def get(self, request):
-        # first_pipeline_yaml = PipelineYaml.objects.all().first()
         spec_details = []
 
         for spec_yaml in SpecYaml.objects.all().order_by("name"):
@@ -41,6 +40,12 @@ class AddPipelineView(APIView):
 
     def post(self, request):
         pipeline_name = request.data.get("pipeline_name")
+        if not pipeline_name:
+            return JsonResponse(
+                {"message": "Pipeline name is required.."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        
         if PipelineYaml.objects.filter(name=pipeline_name).exists():
             return JsonResponse(
                 {"message": f"Pipeline with name [{pipeline_name}] already exists"},
