@@ -2,8 +2,6 @@ import { initializeAddedCard } from './card.js';
 import { initializeLanesZone } from './lanes.js';
 import { createNewSwimLane } from './swim_lane.js';
 
-var clickedAddStepButtonId = null;
-
 
 initializeLanesZone($(".lanes").first());
 
@@ -36,7 +34,7 @@ $("#add-column-button").on('click', function(event) {
   $(".lanes").append(createNewSwimLane(columnName));
 
   $(".add-step-button").on("click", function() {
-      clickedAddStepButtonId = this.id;
+      $('#stepListPopOut').attr('data-add-step-button-id', this.id);
   });
 
   // Clear the input field
@@ -61,7 +59,8 @@ $('.add-new-step').on('click', function() {
   clonedCard = initializeAddedCard(clonedCard);
 
   // Add the selected card to the swim lane
-  $("#" + clickedAddStepButtonId).parent().append(clonedCard);
+  var addStepButtonId = $('#stepListPopOut').attr('data-add-step-button-id');
+  $("#" + addStepButtonId).parent().append(clonedCard);
 
   $('#stepListPopOut').modal('hide');
   $('.available-step').removeClass('selected');
