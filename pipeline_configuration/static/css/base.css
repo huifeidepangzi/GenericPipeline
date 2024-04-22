@@ -177,6 +177,16 @@ a.article:hover {
   /* text-align: left; */
 }
 
+.side-bar-link {
+    display: flex !important; 
+    justify-content: center !important;
+}
+
+.side-bar-title {
+    display: flex !important; 
+    justify-content: center !important;
+}
+
 /* .row {
     overflow-x: auto;
 } */
