@@ -1,6 +1,4 @@
 from datetime import datetime
-from http.client import HTTPResponse
-from typing import List
 from django.http import JsonResponse
 from rest_framework import generics
 import yaml
@@ -22,8 +20,6 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 class AddPipelineView(LoginRequiredMixin, APIView):
     authentication_classes = [
-        BasicAuthentication, 
-        SessionAuthentication, 
         TokenAuthentication,
     ]
     renderer_classes = [TemplateHTMLRenderer]
@@ -118,7 +114,10 @@ class AddPipelineView(LoginRequiredMixin, APIView):
         )
 
 
-class GetYAMLPreviewView(APIView):
+class GetYAMLPreviewView(LoginRequiredMixin, APIView):
+    authentication_classes = [
+        TokenAuthentication,
+    ]
     def post(self, request):
         logic_blocks = []
         for logic_block_name, stage_names in request.data.get("logic_blocks").items():
