@@ -290,3 +290,25 @@ textarea:hover {
   background: #db3e4e !important;
   border-color: #db3e4e !important;
 }
+
+#edit-pipeline-container {
+  margin-right: auto;
+  margin-left: 0;
+  display: none;
+}
+
+#edit-pipeline-button {
+  width: 150px;
+  font-size: 16px;
+  background: #7386D5;
+  border-color: #7386D5;
+}
+
+#edit-pipeline-button:hover {
+  background: #5e6bdf;
+  border-color: #5e6bdf;
+}
+
+input:read-only {
+  color: #888; /* replace with your desired color */
+}

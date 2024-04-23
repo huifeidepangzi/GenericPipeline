@@ -162,3 +162,117 @@ class ExecutionRecordUpdateStatusView(generics.UpdateAPIView):
         instance.save()
 
         return Response(serializer.data)
+
+
+class EditPipelineTemplateView(LoginRequiredMixin, APIView):
+    authentication_classes = [
+        TokenAuthentication,
+    ]
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = "edit_pipeline.html"
+
+    def get(self, request):
+        all_pipeline_names = PipelineYaml.objects.all().values_list("name", flat=True)
+        
+        spec_details = []
+        for spec_yaml in SpecYaml.objects.all().order_by("name"):
+            spec_details.append(
+                {
+                    "name": spec_yaml.name,
+                    "description": spec_yaml.description,
+                    "doc_link": spec_yaml.document_link,
+                }
+            )
+        
+        return Response({"all_pipeline_names": all_pipeline_names, "spec_details": spec_details})
+
+
+class EditPipelineView(LoginRequiredMixin, APIView):
+    authentication_classes = [
+        TokenAuthentication,
+    ]
+    def get(self, request, pipeline_name):
+        pipeline_yaml = PipelineYaml.objects.get(name=pipeline_name)
+        pipeline_body = yaml.load(pipeline_yaml.body, Loader=yaml.FullLoader)
+
+        for logic_block in pipeline_body["logic_blocks"]:
+            logic_block["spec_details"] = []
+            for stage in logic_block["stages"]:
+                logic_block["spec_details"].append(
+                    {
+                        "name": stage["spec"],
+                        "description": SpecYaml.objects.get(name=stage["spec"]).description,
+                        "doc_link": SpecYaml.objects.get(name=stage["spec"]).document_link,
+                    }
+                )
+
+        payload = {
+            "pipeline_name": pipeline_name, 
+            "pipeline_description": pipeline_yaml.description, 
+            "pipeline_body": pipeline_body,
+        }
+
+        return JsonResponse(payload, status=status.HTTP_200_OK)
+    
+    def post(self, request):
+        pipeline_name = request.data.get("pipeline_name")
+        
+        if not request.data.get("logic_blocks"):
+            return JsonResponse(
+                {"message": "No logic blocks provided.."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        
+        logic_blocks = []
+        for logic_block_name, stage_names in request.data.get("logic_blocks").items():
+            logic_blocks.append(
+                {
+                    "name": logic_block_name,
+                    "stages": [
+                        {
+                            "desc": SpecYaml.objects.get(name=name).description,
+                            "spec": SpecYaml.objects.get(name=name).name,
+                        }
+                        for name in stage_names
+                    ],
+                }
+            )
+            
+        stage_names = [stage["spec"] for lb in logic_blocks for stage in lb["stages"]]
+        if len(stage_names) != len(set(stage_names)):
+            return JsonResponse(
+                {"message": "Duplicate stages in logic blocks"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+            
+        for logic_block in logic_blocks:
+            if len(logic_block["stages"]) == 0:
+                return JsonResponse(
+                    {"message": f"Logic block [{logic_block['name']}] should have at least 1 stages"},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
+        yaml_body_dict = {
+            "name": pipeline_name,
+            "logic_blocks": logic_blocks,
+        }
+
+        # Get existing pipeline yaml by name and update its fields
+        updated_pipeline_yaml = PipelineYaml.objects.get(name=pipeline_name)
+        updated_pipeline_yaml.description = request.data.get("pipeline_description")
+        updated_pipeline_yaml.body = yaml.dump(yaml_body_dict, indent=4, sort_keys=False)
+        updated_pipeline_yaml.save()
+
+        spec_yamls = SpecYaml.objects.filter(
+            name__in=[stage["spec"] for lb in logic_blocks for stage in lb["stages"]]
+        )
+        updated_pipeline_yaml.specyamls.set(spec_yamls)
+
+        return JsonResponse(
+            {
+                "message": "POST request received", 
+                "app_name": "pipeline_configuration", 
+                "admin_pk": updated_pipeline_yaml.pk
+            }, 
+            status=status.HTTP_200_OK,
+        )
