@@ -1,5 +1,7 @@
 const newYamlCreationForm = document.querySelector("#new-yaml-creation-form");
 
+$(".side-bar-link").css('background', '#7386D5').css('color', '#fff');
+$("#side-bar-new-button").css('background', '#fff').css('color', '#7386D5');
 
 newYamlCreationForm.addEventListener('submit', function (e) {
   e.preventDefault()
@@ -37,6 +39,9 @@ newYamlCreationForm.addEventListener('submit', function (e) {
   }).then(response => {
     var saveResultMessageLocation = document.getElementById("save-result-message");
     if (response.ok) {
+      // disable the save button
+      $("#save-pipeline-button").attr("disabled", "disabled");
+
       response.json().then(data => {
         saveResultMessageLocation.innerHTML = `
         <div class="alert alert-success alert-dismissible fade show" role="alert">

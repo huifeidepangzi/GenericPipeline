@@ -1,5 +1,7 @@
 const editYamlForm = document.querySelector("#edit-yaml-form");
 
+$(".side-bar-link").css('background', '#7386D5').css('color', '#fff');
+$("#side-bar-edit-button").css('background', '#fff').css('color', '#7386D5');
 
 editYamlForm.addEventListener('submit', function (e) {
   e.preventDefault()
