@@ -151,7 +151,7 @@
   border-color: rgb(226,226,226); /* Set the border color to grey */
   border-radius: 4px;
   font-weight: 600;
-  color: rgb(133, 133, 133); /* Set the text color to dark grey */
+  color: rgb(133, 133, 133);
   cursor: pointer; /* Change the cursor to a pointer */
   height: 700px;
   transition: color 0.8s ease, border-color 0.8s ease; /* Add a transition on the color property */
@@ -267,6 +267,29 @@ textarea:hover {
 #add-column-button:hover {
   background: #5e6bdf;
   border-color: #5e6bdf;
+}
+
+#pipeline-name-dropdown {
+  width: 300px;
+  color: #ffffff;
+  background-color: #7386D5;
+  border-color: #7386D5;
+  margin-left: 13px;
+}
+
+.existing-pipeline-yaml {
+  width: 300px;
+}
+
+.existing-pipeline-yaml:hover {
+  background-color: #7386D5;
+  cursor: pointer;
+  color: #ffffff;
+}
+
+#pipeline-name-dropdown:hover {
+  background-color: #5e6bdf; /* Change the text color to black when hovering */
+  border-color: #5e6bdf; /* Change the border color to black when hovering */
 }
 
 #add-new-step-button {

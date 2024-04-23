@@ -182,6 +182,11 @@ a.article:hover {
     justify-content: center !important;
 }
 
+.side-bar-link:hover {
+    background: #fff !important;
+    color: #7386D5 !important;
+}
+
 .side-bar-title {
     display: flex !important; 
     justify-content: center !important;
