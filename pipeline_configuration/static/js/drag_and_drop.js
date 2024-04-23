@@ -33,10 +33,6 @@ $("#add-column-button").on('click', function(event) {
 
   $(".lanes").append(createNewSwimLane(columnName));
 
-  $(".add-step-button").on("click", function() {
-      $('#stepListPopOut').attr('data-add-step-button-id', this.id);
-  });
-
   // Clear the input field
   $("#column-name").val("");
 });

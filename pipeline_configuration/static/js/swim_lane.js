@@ -41,6 +41,10 @@ export function createNewSwimLane(columnName) {
         $(this).removeClass("lane-is-dragging");
     });
 
+    newColumn.find(".add-step-button").on("click", function() {
+        $('#stepListPopOut').attr('data-add-step-button-id', this.id);
+    });
+
     return newColumn;
 }
 
