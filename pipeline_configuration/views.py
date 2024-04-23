@@ -276,3 +276,13 @@ class EditPipelineView(LoginRequiredMixin, APIView):
             }, 
             status=status.HTTP_200_OK,
         )
+        
+class ContactView(LoginRequiredMixin, APIView):
+    authentication_classes = [
+        TokenAuthentication,
+    ]
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = "contact.html"
+
+    def get(self, request):
+        return Response({"name": "Yi Shan", "email": "huifeidepangzi@gmail.com"})

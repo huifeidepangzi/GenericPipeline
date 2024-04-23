@@ -12,4 +12,5 @@ urlpatterns = [
         "update_job_status/<str:job_id>/",
         views.ExecutionRecordUpdateStatusView.as_view(),
     ),
+    path("contact/", views.ContactView.as_view()),
 ]
