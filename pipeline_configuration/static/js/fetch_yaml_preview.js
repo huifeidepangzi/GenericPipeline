@@ -1,27 +1,25 @@
-const yamlPreviewButton = document.querySelector("#yaml-preview-button");
-
-
-yamlPreviewButton.addEventListener('click', function (e) {
+$("#yaml-preview-button").on('click', function (e) {
   e.preventDefault()
   const newYamlCreationURL = '/pipeline_configuration/generate_yaml_preview/';
 
-  var pipeline_name = document.getElementById("new-pipeline-name").value;
-  var pipeline_description = document.getElementById("new-pipeline-description").value;
+  var pipeline_name = $("#new-pipeline-name").val();
+  var pipeline_description = $("#new-pipeline-description").val();
 
-  var swimLanes = document.getElementById("add-pipeline-lanes-section").querySelectorAll(".swim-lane");
+  var swimLanes = $("#add-pipeline-lanes-section .swim-lane");
   var logicBlocks = {};
 
-  for (var i = 0; i < swimLanes.length; i++) {
+  swimLanes.each(function(i, swimLane) {
     var stepNames = [];
-    var swimLaneName = swimLanes[i].getAttribute("value");
-    var cardHeaders = swimLanes[i].querySelectorAll(".card-header");
+
+    var swimLaneName = $(swimLane).attr("value");
+    var cardHeaders = $(swimLane).find(".card-header");
     
-    for (var j = 0; j < cardHeaders.length; j++) {
-      stepNames.push(cardHeaders[j].getAttribute("value"));
-    }
+    cardHeaders.each(function(j, cardHeader) {
+      stepNames.push($(cardHeader).attr("value"));
+    });
   
     logicBlocks[swimLaneName] = stepNames;
-  }
+  });
 
   var postData = {
     "logic_blocks": logicBlocks,
@@ -29,16 +27,13 @@ yamlPreviewButton.addEventListener('click', function (e) {
     "pipeline_description": pipeline_description,
   };
 
-  fetch(newYamlCreationURL, {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(postData)
-  }).then(response => {
-    var yamlPreviewSection = document.getElementById("yaml-preview");
-    response.json().then(data => {
-      yamlPreviewSection.innerHTML = data.yaml_str;
-    });
-  })
+  $.ajax({
+    url: newYamlCreationURL,
+    type: 'POST',
+    contentType: 'application/json',
+    data: JSON.stringify(postData),
+    success: function(data) {
+      $("#yaml-preview").html(data.yaml_str);
+    }
+  });
 });
