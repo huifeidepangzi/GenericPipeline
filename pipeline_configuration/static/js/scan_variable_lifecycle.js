@@ -1,19 +1,16 @@
-const lifecycleScanForm = document.querySelector('.lifecycle-collection-form');
-
-lifecycleScanForm.addEventListener('submit', function (e) {
+$(".lifecycle-collection-form").on("submit", function (e) {
   e.preventDefault()
-  var formData = new FormData(this);
+
+  // Gets the underlying form element from the jQuery object
+  var formData = new FormData($(this)[0]);
   const scanLifecycleInfoURL = 'collect-lifecycle-info/?variable_name=' + formData.get("variable_name");
 
-  // Access form data
-  fetch(scanLifecycleInfoURL, {
-      method: 'GET',
-      headers: {
-      },
-  }).then(response => {
-      response.json().then(data => {
-        var scanResultElement = document.querySelector(".scan-result-section");
-        scanResultElement.innerText = data.scan_results.join("\n");
-      })
+  $.ajax({
+    url: scanLifecycleInfoURL,
+    type: 'GET',
+    dataType: 'json',
+    success: function(data) {
+      $(".scan-result-section").html(data.scan_results.join("<br/>"));
+    }
   });
 })

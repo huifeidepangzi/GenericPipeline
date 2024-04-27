@@ -2,26 +2,22 @@ import { initializeAddedCard } from './card.js';
 import { createNewSwimLane } from './swim_lane.js';
 
 
-var existingPipelineYamls = document.querySelectorAll(".existing-pipeline-yaml");
-existingPipelineYamls.forEach((pipelineYaml) => {
-  pipelineYaml.addEventListener("click", (e) => {
+$(".existing-pipeline-yaml").each( function() {
+  $(this).on("click", (e) => {
     e.preventDefault()
 
     $(".swim-lane-wrapper").remove();
 
-    var pipelineName = pipelineYaml.getAttribute("value");
+    var pipelineName = $(this).attr("value");
     var getSinglePipelineDataURL = `/pipeline_configuration/edit_single_pipeline/${pipelineName}/`;
 
-    fetch(getSinglePipelineDataURL, {
-      method: 'GET',
-      headers: {
-          'Content-Type': 'application/json'
-      },
-      // body: JSON.stringify({"pipeline_name": pipelineName})
-    }).then(response => {
-      response.json().then(data => {
-        var editPipelineContainer = document.getElementById("edit-pipeline-container");
-        editPipelineContainer.style.display = "block";
+    $.ajax({
+      url: getSinglePipelineDataURL,
+      type: 'GET',
+      dataType: 'json',
+      contentType: 'application/json',
+      success: function(data) {
+        $("#edit-pipeline-container").css("display", "block");
 
         // Use the response data to populate the form
         var pipelineName = data.pipeline_name;
@@ -29,8 +25,6 @@ existingPipelineYamls.forEach((pipelineYaml) => {
         var pipelineBody = data.pipeline_body;
         var logicBlocks = pipelineBody['logic_blocks'];
 
-        // document.getElementById("new-pipeline-name").value = pipelineName;
-        // document.getElementById("new-pipeline-description").value = pipelineDescription;
         $('#new-pipeline-name').val(pipelineName);
         $('#new-pipeline-description').val(pipelineDescription);
 
@@ -38,11 +32,10 @@ existingPipelineYamls.forEach((pipelineYaml) => {
         $('#new-pipeline-name').attr('disabled', 'disabled');
 
         // Create swim lanes for each logic block and add steps to each swim lane
-        for (var i = 0; i < logicBlocks.length; i++) {
-          // console.log(logicBlock);
-          var swimLane = createNewSwimLane(logicBlocks[i]['name']);
-          for (var j = 0; j < logicBlocks[i]['spec_details'].length; j++) {
-            var spec_detail = logicBlocks[i]['spec_details'][j];
+        $.each(logicBlocks, function(i, logicBlock) {
+          var swimLane = createNewSwimLane(logicBlock['name']);
+
+          $.each(logicBlock['spec_details'], function(i, spec_detail) {
             var newCard = $('<div></div>')
             .addClass('card swim-lane-item mb-3 available-step')
             .attr('draggable', 'true').html(`
@@ -64,11 +57,11 @@ existingPipelineYamls.forEach((pipelineYaml) => {
             newCard = initializeAddedCard(newCard);
 
             swimLane.find(".swim-lane").append(newCard);
-          }
-          swimLane.find(".swim-lane").attr("value", logicBlocks[i]['name']);
+          });
+          swimLane.find(".swim-lane").attr("value", logicBlock['name']);
           $(".lanes").append(swimLane);
-        }
-      });
+        });
+      }
     });
   });
 });
