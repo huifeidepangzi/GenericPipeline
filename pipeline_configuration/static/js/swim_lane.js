@@ -1,6 +1,6 @@
 export function createNewSwimLane(columnName) {
     var newColumn = $('<div></div>')
-    .addClass('col-sm-3 swim-lane-wrapper')
+    .addClass('swim-lane-wrapper')
     .attr('draggable', 'true')
     .html(`
         <div class="swim-lane" value="${columnName}">
